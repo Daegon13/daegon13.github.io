@@ -1,0 +1,111 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin · Config</title>
+<link rel="stylesheet" href="css/styles.css">
+</head><body>
+<div class="container" style="max-width:900px;padding:24px;background:#111;margin-top:48px;border-radius:12px">
+  <h1>Panel de configuración</h1>
+  <div id="loginBox">
+    <p>Ingresá con tu email y contraseña.</p>
+    <input id="email" placeholder="email"><br>
+    <input id="pass" type="password" placeholder="contraseña"><br>
+    <button id="loginBtn" class="cta-button">Ingresar</button>
+    <div id="authMsg"></div>
+  </div>
+
+  <form id="form" style="display:none;margin-top:16px">
+    <h2>Apariencia</h2>
+    <label>Tema activo</label><input id="activeThemeId" placeholder="dark-rose">
+    <label>Color primario</label><input id="colorPrimary" type="color" value="#d4af37">
+
+    <h2>Encabezado</h2>
+    <label>Logo (texto)</label><input id="logoText" placeholder="Casa Minndara">
+    <label>Navegación (JSON)</label>
+    <textarea id="navJson" rows="4">[{"label":"Servicios","href":"servicios.html"}]</textarea>
+
+    <h2>Hero</h2>
+    <label>Título</label><input id="heroTitle" placeholder="...">
+    <label>Subtítulo</label><input id="heroSubtitle" placeholder="...">
+    <label>Tipo fondo</label><input id="heroType" placeholder="video|image" value="video">
+    <label>URL fondo</label><input id="heroUrl" placeholder="/images/Eclipse.mp4">
+
+    <h2>Social</h2>
+    <label>WhatsApp</label><input id="wa" placeholder="096...">
+    <label>Instagram</label><input id="ig" placeholder="https://...">
+
+    <button class="cta-button" type="submit">Guardar</button>
+    <button id="logoutBtn" type="button">Salir</button>
+    <div id="saveMsg"></div>
+  </form>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = { /* tu config aquí */ };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const $ = s => document.querySelector(s);
+$("#loginBtn").onclick = async () => {
+  $("#authMsg").textContent = "Conectando…";
+  try { await signInWithEmailAndPassword(auth, $("#email").value, $("#pass").value); }
+  catch (e) { $("#authMsg").textContent = "Error de inicio de sesión"; }
+};
+$("#logoutBtn").onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    $("#loginBox").style.display = "none";
+    $("#form").style.display = "block";
+    // precarga
+    const snap = await getDoc(doc(db, "site_config", "current"));
+    const c = snap.exists() ? snap.data() : {};
+    $("#activeThemeId").value = c.activeThemeId || "dark-rose";
+    $("#colorPrimary").value  = c.themes?.[c.activeThemeId]?.colors?.primary || "#d4af37";
+    $("#logoText").value      = c.header?.logoText || "Casa Minndara";
+    $("#navJson").value       = JSON.stringify(c.header?.nav || [], null, 2);
+    $("#heroTitle").value     = c.hero?.title || "";
+    $("#heroSubtitle").value  = c.hero?.subtitle || "";
+    $("#heroType").value      = c.hero?.backgroundType || "video";
+    $("#heroUrl").value       = c.hero?.backgroundUrl  || "";
+    $("#wa").value            = c.socials?.whatsapp || "";
+    $("#ig").value            = c.socials?.instagram || "";
+  } else {
+    $("#loginBox").style.display = "block";
+    $("#form").style.display = "none";
+  }
+});
+
+$("#form").onsubmit = async (e) => {
+  e.preventDefault();
+  $("#saveMsg").textContent = "Guardando…";
+  const ref  = doc(db, "site_config", "current");
+  const snap = await getDoc(ref);
+  const c    = snap.exists() ? snap.data() : { themes:{}, header:{}, hero:{}, socials:{} };
+
+  const id = $("#activeThemeId").value;
+  c.activeThemeId = id;
+  c.themes[id] = c.themes[id] || { colors:{} };
+  c.themes[id].colors.primary = $("#colorPrimary").value;
+
+  c.header.logoText = $("#logoText").value;
+  try { c.header.nav = JSON.parse($("#navJson").value || "[]"); } catch { alert("JSON inválido"); return; }
+
+  c.hero.title = $("#heroTitle").value;
+  c.hero.subtitle = $("#heroSubtitle").value;
+  c.hero.backgroundType = $("#heroType").value;
+  c.hero.backgroundUrl  = $("#heroUrl").value;
+
+  c.socials.whatsapp  = $("#wa").value;
+  c.socials.instagram = $("#ig").value;
+
+  c.version = (c.version ?? 1) + 1;
+  await setDoc(ref, c, { merge:false });
+  $("#saveMsg").textContent = "Guardado ✓";
+};
+</script>
+</body></html>
