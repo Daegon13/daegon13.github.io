@@ -1,0 +1,30 @@
+/* Deja comentarios */
+
+Deja comentarios en todas las secciones sin comentar del codigo actual
+explicando el funcionamiento de cada seccion pero no modifiques nada del codigo en si mismo
+
+/*Prompts para Frontend*/
+
+Genera la estructura básica de un archivo HTML5.
+Crea un formulario de contacto con validación en JavaScript.
+Agrega un menú de navegación responsive usando CSS y JavaScript.
+Implementa un slider de imágenes solo con HTML y CSS.
+Explica cómo funciona Flexbox y dame un ejemplo práctico.
+Crea una tabla dinámica que permita agregar y eliminar filas.
+Haz que un botón muestre u oculte un elemento en la página.
+Aplica estilos personalizados a un input de tipo file.
+Implementa un modal (ventana emergente) con HTML, CSS y JavaScript.
+Muestra cómo consumir una API REST y mostrar los datos en la página.
+
+/* Prompts para Backend */
+
+Crea una API REST básica en Node.js/Express que maneje operaciones CRUD.
+Explica cómo conectar una base de datos MySQL/PostgreSQL a una aplicación Node.js.
+Genera un endpoint para autenticación de usuarios con JWT.
+Muestra cómo subir archivos al servidor usando Express y Multer.
+Implementa un sistema de roles y permisos en el backend.
+Explica cómo manejar errores globales en una API Express.
+Crea un middleware para validar tokens de acceso.
+Muestra cómo enviar correos electrónicos desde el backend.
+Explica cómo estructurar un proyecto backend siguiendo buenas prácticas.
+Genera un script para inicializar la base de datos con datos de ejemplo.
