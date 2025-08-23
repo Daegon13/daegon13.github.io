@@ -32,13 +32,11 @@
   z-index: -1;
 }
 
-/* Estilos generales del body: fuente, color de texto y fondo con imagen */
+/* Estilos generales del body: fuente, color de texto y fondo */
 body {
     font-family: var(--font-main);
     color: var(--color-text);
-    background-image: url('../images/background_1.jpg');
-    background-size: cover;
-    background-position: center;
+    background-color: var(--color-bg);
     min-height: 100vh;
 }
 
@@ -98,9 +96,9 @@ header nav ul li a {
 }
 
 /* Hero Section */
-/* Sección principal con imagen de fondo y texto centrado */
+/* Sección principal con fondo de color y texto centrado */
 #hero {
-    background: url('../images/background_1.jpg') no-repeat center center/cover;
+    background-color: var(--color-bg);
     height: 60vh;
     min-height: 20rem;
     display: flex;
