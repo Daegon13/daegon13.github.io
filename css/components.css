@@ -1,0 +1,14 @@
+/* Componentes específicos y pequeños ajustes aislados */
+
+/* Mejoras del menú abierto en mobile */
+#menu.is-open{
+  display:flex !important;
+  background:rgba(13,11,30,.9);
+  padding: .75rem;
+  border-radius: .75rem;
+}
+
+/* Ajustes de tipografía en FAQ y blockquotes */
+details > summary{cursor:pointer; font-weight:700}
+blockquote p{margin:0 0 .4rem}
+blockquote footer{color:var(--muted); font-size:.95rem}

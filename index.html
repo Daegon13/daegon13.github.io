@@ -12,7 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
 </head>
 <body>
-<!-- Botón hamburguesa y menú lateral -->
+
+    <!-- Botón hamburguesa y menú lateral -->
 <div class="hamburger-menu" id="hamburgerMenu">
   <span></span>
   <span></span>
@@ -42,6 +43,13 @@
                     <li><a href="#servicios">Servicios</a></li>
                     <li><a href="#testimonios">Testimonios</a></li>
                     <li><a href="#contacto">Contacto</a></li>
+                    <li>
+            <!-- CTA a WhatsApp con texto prellenado -->
+                    <a class="btn btn--whatsapp" id="ctaWhats" 
+                        href="https://wa.me/59896106373?text=Hola%20Luz,%20quiero%20un%20turno">
+                        Reservar
+                    </a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -84,20 +92,26 @@
             </div>
         </section>
 
-        <!-- Sección de testimonios de clientes -->
-        <section id="testimonios" class="container">
-            <h2>Testimonios</h2>
-            <div class="testimonios-grid">
-                <blockquote>
-                    <p>"La lectura de tarot fue increíblemente precisa. ¡Recomiendo sus servicios!"</p>
-                    <cite>- Ana G.</cite>
-                </blockquote>
-                <blockquote>
-                    <p>"El ritual de magia blanca trajo paz a mi vida. Muy profesional."</p>
-                    <cite>- Carlos M.</cite>
-                </blockquote>
-            </div>
-        </section>
+  <!-- Testimonios cortos (ideal con fotos/estrellas reales más adelante) -->
+  <section class="section section--alt" aria-labelledby="testi-title">
+    <div class="container">
+      <h2 id="testi-title">Lo que dicen</h2>
+      <div class="grid">
+        <blockquote class="card">
+          <p>“La lectura me dio claridad y paz. Volví a dormir tranquila.”</p>
+          <footer>— M., Centro (Montevideo)</footer>
+        </blockquote>
+        <blockquote class="card">
+          <p>“Súper ética y directa, sin vueltas. Recomendadísima.”</p>
+          <footer>— M.G., Sayago</footer>
+        </blockquote>
+        <blockquote class="card">
+          <p>“La limpieza se sintió al instante. Gracias, Luz.”</p>
+          <footer>— M.A., La Teja</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
 
         <!-- Sección de formulario de contacto -->
         <section id="contacto" class="container">

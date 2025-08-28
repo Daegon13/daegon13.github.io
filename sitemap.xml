@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mapa del sitio para ayudar a los buscadores a indexar tus páginas -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://daegon13.github.io/</loc></url>
+  <url><loc>https://daegon13.github.io/servicios.html</loc></url>
+  <url><loc>https://daegon13.github.io/tarot.html</loc></url>
+  <url><loc>https://daegon13.github.io/como-trabajamos.html</loc></url>
+  <url><loc>https://daegon13.github.io/faq.html</loc></url>
+  <url><loc>https://daegon13.github.io/admin.html</loc></url>
+</urlset>

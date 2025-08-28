@@ -1,0 +1,116 @@
+/* ===========================
+   Variables, reset y base
+   =========================== */
+:root{
+  /* Paleta base (accent puede cambiarse desde admin) */
+  --bg:#0d0b1e;
+  --fg:#EDE6FF;
+  --muted:#BFA8FF;
+  --accent:#8C4DFE;
+
+  /* Dimensiones y sombras */
+  --radius:1.25rem;
+  --shadow:0 10px 30px rgba(0,0,0,.25);
+
+  /* Tipografía */
+  --font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji';
+}
+
+/* Reset mínimo y preferencias de scroll */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--bg); color:var(--fg); font:var(--font);}
+
+/* Contenedor fluido con máximo ancho legible */
+.container{max-width:1100px; margin-inline:auto; padding:clamp(16px,3vw,32px);}
+
+/* Accesibilidad: foco visible */
+:focus-visible{outline:2px dashed var(--accent); outline-offset:3px}
+
+/* ===========================
+   Header y navegación
+   =========================== */
+.site-header{position:sticky; top:0; background:rgba(13,11,30,.85); backdrop-filter:saturate(140%) blur(8px); z-index:100}
+.nav{display:flex; align-items:center; gap:1rem;}
+.logo{font-weight:800; color:var(--fg); text-decoration:none; letter-spacing:.2px}
+.nav__toggle{margin-left:auto; background:transparent; border:1px solid rgba(255,255,255,.2); color:var(--fg); padding:.5rem .75rem; border-radius:.5rem; display:inline-block}
+.nav__list{list-style:none; margin:0; padding:0; display:none; align-items:center; gap:1rem}
+.nav__list.is-open{display:flex; flex-direction:column; align-items:flex-start; margin-top:1rem}
+.nav__list a{color:var(--fg); text-decoration:none}
+@media (min-width:900px){
+  .nav__toggle{display:none}
+  .nav__list{display:flex; margin-left:auto; flex-direction:row}
+}
+
+/* ===========================
+   Hero
+   =========================== */
+.hero{padding-block: clamp(32px, 6vw, 80px); background:
+  radial-gradient(60% 60% at 20% 20%, rgba(140,77,254,.25), transparent 60%),
+  radial-gradient(50% 50% at 80% 10%, rgba(191,168,255,.18), transparent 60%);
+}
+.hero__grid{display:grid; gap:clamp(16px,2.5vw,32px); align-items:center}
+@media (min-width:900px){
+  .hero__grid{grid-template-columns:1.1fr .9fr}
+}
+.hero__copy h1{font-size:clamp(28px, 3.2vw, 48px); line-height:1.1; margin:.2em 0;}
+.hero__subtitle{color:var(--muted); margin:.5rem 0 1rem}
+.hero__ctas{display:flex; gap:.75rem; flex-wrap:wrap}
+.bullets{display:flex; flex-wrap:wrap; gap:.75rem; padding:0; margin:1rem 0 0; list-style:none}
+.bullets li{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); padding:.4rem .7rem; border-radius:999px; color:var(--fg); font-size:.95rem}
+.hero__img img{width:100%; height:auto; border-radius:var(--radius); box-shadow:var(--shadow);}
+
+/* ===========================
+   Secciones, cards y grids
+   =========================== */
+.section{padding-block: clamp(24px,4vw,56px);}
+.section--alt{background:rgba(255,255,255,.03)}
+.grid{display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius);
+  padding:1.1rem;
+  box-shadow:var(--shadow);
+}
+.price{margin:.5rem 0 1rem}
+
+/* ===========================
+   Botones
+   =========================== */
+.btn{display:inline-block; padding:.85rem 1.1rem; border-radius:var(--radius); text-decoration:none; border:1px solid transparent}
+.btn--primary{background:var(--accent); color:#0d0b1e; font-weight:700}
+.btn--ghost{border-color: rgba(255,255,255,.25); color:var(--fg)}
+.btn--whatsapp{background:#25D366; color:#0d0b1e; font-weight:700}
+.btn--danger{background:#ff5b6b; color:#0d0b1e; font-weight:700}
+
+/* ===========================
+   Footer
+   =========================== */
+.site-footer{padding-block:24px; background:#0b0a18; border-top:1px solid rgba(255,255,255,.08)}
+.footer__grid{display:flex; align-items:center; justify-content:space-between; gap:1rem}
+.site-footer a{color:var(--muted); text-decoration:none}
+
+/* ===========================
+   WhatsApp flotante
+   =========================== */
+.wapp-float{
+  position:fixed; inset:auto 1rem 1rem auto; width:3.5rem; height:3.5rem;
+  display:grid; place-items:center; border-radius:999px; background:#25D366; color:#0d0b1e; 
+  font-size:1.4rem; box-shadow:var(--shadow); z-index:999
+}
+@media (min-width:900px){.wapp-float{inset:auto 2rem 2rem auto}}
+
+/* ===========================
+   Formulario y utilidades
+   =========================== */
+.form-field{display:grid; gap:.35rem; margin:.7rem 0}
+.form-field input, .form-field textarea{
+  width:100%; background:rgba(0,0,0,.25); color:var(--fg);
+  border:1px solid rgba(255,255,255,.18); border-radius:.75rem; padding:.7rem .8rem
+}
+.grid-2{display:grid; gap:1rem}
+@media (min-width:900px){.grid-2{grid-template-columns:1fr 1fr}}
+
+.muted{color:var(--muted)}
+.promo{background: var(--accent); color:#0d0b1e; text-align:center; padding:.6rem 1rem}
