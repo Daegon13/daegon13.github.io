@@ -60,7 +60,7 @@ body {
   z-index: 1000;
 
   /* Fondo translúcido */
-  background-color: rgba(0, 0, 0, 0.4); /* Negro con 40% de opacidad */
+  background-color: rgba(110, 110, 110, 0.4); /* Negro con 40% de opacidad */
 
   /* Difuminado del fondo */
   backdrop-filter: blur(10px);
