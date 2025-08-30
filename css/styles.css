@@ -73,6 +73,42 @@ body {
   transition: background-color 0.3s ease;
 }
 
+/* Header: separación flexible entre hamburguesa y logo, con logo a la izquierda y navegación a la derecha */
+header .container {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  position: relative;
+  justify-content: flex-start; /* Logo y hamburguesa a la izquierda */
+}
+
+/* El logo debe estar al principio, navegación al final */
+header .logo {
+  margin-left: 0;
+  order: 1;
+  flex-shrink: 0;
+}
+
+/* Menú hamburguesa antes del logo */
+.hamburger-menu {
+  order: 0;
+  flex-shrink: 0;
+}
+
+/* Navegación al final */
+header nav {
+  order: 2;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive: ajusta el gap para pantallas pequeñas */
+@media (max-width: 600px) {
+  header .container {
+    gap: 1.2rem;
+  }
+}
 
 /* Estilo para el logo en el header */
 header .logo {

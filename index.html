@@ -9,6 +9,8 @@
     <title>Servicios Esotéricos - Magia y Tarot</title>
     <!-- Cambiar ruta absoluta a relativa -->
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -37,7 +39,7 @@
     <!-- Encabezado principal con logo y navegación interna -->
     <header>
         <div class="container">
-            <h1 class="logo">Casa Minndara</h1>
+            <a href="index.html" class="logo">Cristal sagrado</a>
             <nav>
                 <ul>
                     <li><a href="#servicios">Servicios</a></li>
@@ -138,6 +140,17 @@
             </ul>
         </div>
     </footer>
+
+    
+  <!-- 
+    Botón flotante de WhatsApp: 
+    Este botón debe mostrarse solo en dispositivos móviles para facilitar el acceso rápido a la reserva por WhatsApp.
+    Se recomienda ocultarlo en pantallas grandes mediante CSS media queries.
+  -->
+  <a class="wapp-float" id="floatWhats" 
+     href="https://wa.me/59896106373?text=Hola%20Luz,%20quiero%20un%20turno" 
+     aria-label="Reservar por WhatsApp">💬</a>
+
 <!-- Script para controlar la apertura/cierre del menú lateral -->
 <script>
 const hamburger = document.getElementById('hamburgerMenu');
