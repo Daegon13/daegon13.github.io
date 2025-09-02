@@ -42,7 +42,7 @@ body {
 
 /* Contenedor principal para centrar y limitar el ancho del contenido */
 .container {
-    max-width: var(--container-max-width);
+    max-width: 100%; /* Cambiado de var(--container-max-width) a 100% */
     margin: 0 auto;
     padding: 0 var(--container-padding);
     width: 100%;
@@ -101,6 +101,7 @@ header nav {
   flex-grow: 1;
   display: flex;
   justify-content: flex-end;
+  width: 100%; /* Asegura que la navegación ocupe todo el ancho */
 }
 
 /* Responsive: ajusta el gap para pantallas pequeñas */
@@ -142,6 +143,7 @@ header nav ul li a {
     justify-content: center;
     text-align: center;
     color: var(--color-text-light);
+    width: 100%; /* Asegura que el hero ocupe todo el ancho */
 }
 
 /* Título principal del hero */
@@ -179,6 +181,7 @@ header nav ul li a {
 /* Sección de servicios con padding vertical */
 #servicios {
     padding: 3.125rem 0;
+    width: 100%; /* Asegura que la sección de servicios ocupe todo el ancho */
 }
 
 /* Título de la sección de servicios */
@@ -218,6 +221,7 @@ header nav ul li a {
     background-color: var(--color-bg);
     color: var(--color-text-light);
     padding: 3.125rem 0;
+    width: 100%; /* Asegura que la sección de testimonios ocupe todo el ancho */
 }
 
 /* Título de la sección de testimonios */
@@ -252,6 +256,7 @@ cite {
 /* Sección de contacto con padding vertical */
 #contacto {
     padding: 3.125rem 0;
+    width: 100%; /* Asegura que la sección de contacto ocupe todo el ancho */
 }
 
 /* Título de la sección de contacto */
@@ -297,6 +302,7 @@ footer {
     color: var(--color-text-light);
     padding: 1.25rem 0;
     text-align: center;
+    width: 100%; /* Asegura que el footer ocupe todo el ancho */
 }
 
 /* Lista de enlaces en el footer */
