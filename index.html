@@ -116,18 +116,17 @@
   </section>
 
         <!-- Sección de formulario de contacto -->
-        <section id="contacto" class="container">
-            <h2>Contacto</h2>
-            <form action="#" method="post">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="mensaje">Mensaje:</label>
-                <textarea id="mensaje" name="mensaje" required></textarea>
-                <button type="submit" class="cta-button">Enviar</button>
-            </form>
-        </section>
+        <form action="https://formspree.io/f/mdklwnlg" method="POST">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+             <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" required></textarea>
+    <!-- Campo oculto para evitar spam (opcional) -->
+            <input type="text" name="_gotcha" style="display:none">
+            <button type="submit" class="cta-button">Enviar</button>
+        </form>
     </main>
 
     <!-- Pie de página con derechos y enlaces sociales -->
