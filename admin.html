@@ -21,7 +21,7 @@
     <label>Color primario</label><input id="colorPrimary" type="color" value="#d4af37">
 
     <h2>Encabezado</h2>
-    <label>Logo (texto)</label><input id="logoText" placeholder="Casa Minndara">
+    <label>Logo (texto)</label><input id="logoText" placeholder="Cristal sagrado">
     <label>Navegación (JSON)</label>
     <textarea id="navJson" rows="4">[{"label":"Servicios","href":"servicios.html"}]</textarea>
 
@@ -68,7 +68,7 @@ onAuthStateChanged(auth, async (user) => {
     const c = snap.exists() ? snap.data() : {};
     $("#activeThemeId").value = c.activeThemeId || "dark-rose";
     $("#colorPrimary").value  = c.themes?.[c.activeThemeId]?.colors?.primary || "#d4af37";
-    $("#logoText").value      = c.header?.logoText || "Casa Minndara";
+    $("#logoText").value      = c.header?.logoText || "Cristal sagrado";
     $("#navJson").value       = JSON.stringify(c.header?.nav || [], null, 2);
     $("#heroTitle").value     = c.hero?.title || "";
     $("#heroSubtitle").value  = c.hero?.subtitle || "";

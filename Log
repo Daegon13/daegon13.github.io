@@ -1,0 +1,31 @@
+Posibles mejoras:
+
+Optimización de SEO:
+
+El título y la descripción son buenos, pero podrías agregar etiquetas og: para mejorar el aspecto en redes sociales.
+Añadir un favicon para mejor presencia en pestañas del navegador.
+Accesibilidad:
+
+Agregar atributos alt a imágenes y videos (aunque el video tiene texto alternativo, podrías mejorar la accesibilidad con subtítulos o descripciones).
+Usar etiquetas semánticas como <section>, <article>, <aside>, <nav> correctamente (ya usas varias, pero revisa el uso de <footer> y <header>).
+Performance:
+
+Optimizar el video de fondo para que cargue rápido en dispositivos móviles (usar versiones más ligeras o diferir la carga).
+Comprimir imágenes y videos.
+Responsive y UX:
+
+El menú lateral y el botón flotante de WhatsApp están bien pensados para móviles, pero podrías mejorar la visibilidad del botón flotante con animaciones suaves.
+Añadir una animación de entrada para el hero y los servicios para hacer la experiencia más atractiva.
+Revisar el contraste de colores para asegurar buena legibilidad.
+Interactividad:
+
+Agregar feedback visual al enviar el formulario (mensaje de éxito/error).
+Mejorar el menú hamburguesa con animaciones (líneas que se transforman en una X al abrir).
+Contenido:
+
+Incluir testimonios con imágenes reales o estrellas de calificación.
+Añadir una breve presentación o foto de la persona detrás del servicio para generar confianza.
+Código y estructura:
+
+Unificar rutas de CSS (base.css debería ser base.css para consistencia).
+Separar el JavaScript en un archivo externo para mejor mantenimiento.
