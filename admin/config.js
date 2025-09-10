@@ -13,6 +13,6 @@ export const firebaseConfig = {
 
 // Lista blanca de emails permitidos a ingresar al panel (extra en frontend)
 export const ALLOWED_EMAILS = [
-  "damgmarin13@gmail.com",
+  "damgmarin13@gmail.com","mayadalucia@gmail.com"
   // Agrega aquí otros correos autorizados…
 ];
