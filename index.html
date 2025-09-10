@@ -172,6 +172,17 @@ document.body.addEventListener('click', (e) => {
   }
 });
 </script>
+<!-- Lectura de contenido dinámico desde Firestore (público) -->
+<script type="module" src="/assets/js/data.js"></script>
+<script type="module">
+  import { renderServices } from '/assets/js/data.js';
+  // Renderiza servicios si la página tiene una lista destino
+  if (document.querySelector('#lista-servicios')) {
+    renderServices('#lista-servicios');
+  }
+</script>
+
 </body>
+
 
 </html>

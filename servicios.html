@@ -88,5 +88,15 @@ document.body.addEventListener('click', (e) => {
      href="https://wa.me/59896106373?text=Hola%20Luz,%20quiero%20un%20turno" 
      aria-label="Reservar por WhatsApp">💬</a>
 
+<!-- Lectura de contenido dinámico desde Firestore (público) -->
+<script type="module" src="/assets/js/data.js"></script>
+<script type="module">
+  import { renderServices } from '/assets/js/data.js';
+  // Renderiza servicios si la página tiene una lista destino
+  if (document.querySelector('#lista-servicios')) {
+    renderServices('#lista-servicios');
+  }
+</script>
+
 </body>
 </html>
