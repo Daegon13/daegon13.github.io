@@ -3,16 +3,16 @@
 // Nota: Las claves de Firebase Web no son secretas; las reglas de Firestore controlan el acceso real.
 
 export const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_DOMINIO.firebaseapp.com",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_BUCKET.appspot.com",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyCr0PQVjwtSuQuEZNtdn7atsQV973eZzeY",
+  authDomain: "casa-minndara.firebaseapp.com",
+  projectId: "casa-minndara",
+  storageBucket: "casa-minndara.firebasestorage.app",
+  messagingSenderId: "1042194844667",
+  appId: "1:1042194844667:web:a1af25b6b5e4467d8d195e"
 };
 
 // Lista blanca de emails permitidos a ingresar al panel (extra en frontend)
 export const ALLOWED_EMAILS = [
-  "tu-correo@cristal-sagrado.com",
+  "damgmarin13@gmail.com",
   // Agrega aquí otros correos autorizados…
 ];
