@@ -59,3 +59,21 @@ input:focus, textarea:focus{ outline:1px solid var(--primary); }
   .container{ grid-template-columns: 1fr; }
   .sidebar{ position: sticky; top:56px; z-index:1; display:flex; gap:10px; }
 }
+
+<style>
+  /* Estilos para el botón de cierre */
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+  }
+
+  .close-btn:hover {
+    color: #000;
+  }
+</style>

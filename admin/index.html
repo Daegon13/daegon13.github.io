@@ -11,6 +11,7 @@
   <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js"></script>
+  
 
   <!-- Configuración propia (claves del proyecto) -->
   <script type="module" src="./config.js"></script>
@@ -116,9 +117,12 @@
             <h3 id="serviceModalTitle">Nuevo servicio</h3>
             <input type="hidden" name="id" />
 
+                <!-- Botón de cierre en forma de "X" -->
+            <button type="button" id="closeServiceModal" class="close-btn">✖</button>
+
             <label>
               <span>Nombre</span>
-              <input type="text" name="name" placeholder="Limpieza energética" required />
+              <input type="text" name="name" placeholder="Limpieza energética" />
             </label>
             <label>
               <span>Descripción</span>
@@ -130,14 +134,11 @@
                 <input type="number" name="price" min="0" step="1" placeholder="1500" />
               </label>
               <label>
-                <span>Duración (min)</span>
-                <input type="number" name="duration" min="0" step="5" placeholder="60" />
+                <span>Duración (dias)</span>
+                <input type="number" name="duration" min="0" step="1" placeholder="7" />
               </label>
             </div>
-            <label>
-              <span>Imagen (URL pública)</span>
-              <input type="url" name="imageUrl" placeholder="https://.../servicio.jpg" />
-            </label>
+
             <label class="switch">
               <input type="checkbox" name="active" checked />
               <span>Servicio activo</span>
@@ -173,6 +174,16 @@
       </div>
     </form>
   </div>
+
+  <script>
+  // Script para cerrar el modal al hacer clic en la "X"
+  const serviceModal = document.getElementById("serviceModal");
+  const closeServiceModal = document.getElementById("closeServiceModal");
+
+  closeServiceModal.addEventListener("click", () => {
+    serviceModal.close();
+  });
+  </script>
   
 </body>
 </html>
