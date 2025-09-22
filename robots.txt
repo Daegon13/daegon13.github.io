@@ -1,6 +1,5 @@
-# Permite a todos los bots rastrear el sitio
 User-agent: *
+Disallow: /admin/
 Allow: /
 
-# Indica la ubicación del sitemap
-Sitemap: https://daegon13.github.io/sitemap.xml
+Sitemap: https://cristal-sagrado.com/sitemap.xml
