@@ -440,3 +440,31 @@ body.menu-open::before {
         max-width: 100%;
     }
 }
+
+/* ===== Servicios: filtros + tarjetas ===== */
+.servicios { padding-block: 2rem; }
+.servicios__filtros { display: grid; gap: 1rem; margin-bottom: 1rem; }
+.filtros__categorias { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+/* Chips de categoría */
+.chip { border: 1px solid var(--border-color, #e3e3e3); padding: .35rem .75rem; border-radius: 999px; cursor: pointer; font-size: .9rem; line-height: 1; background: var(--chip-bg, #fff); transition: .2s ease; }
+.chip:hover { transform: translateY(-1px); }
+.chip[aria-pressed="true"] { background: var(--primary-50, #f3e8ff); border-color: var(--primary-400, #a855f7); }
+
+.filtros__buscador input[type="search"]{ width: 100%; max-width: 540px; padding: .65rem .85rem; border: 1px solid var(--border-color, #e3e3e3); border-radius: .75rem; }
+
+/* Tarjetas */
+.serv-card{ border: 1px solid var(--border-color, #ececec); border-radius: 1rem; padding: 1rem; background: var(--card-bg, #fff); box-shadow: var(--card-shadow, 0 2px 10px rgba(0,0,0,.04)); display: grid; gap: .5rem; }
+.serv-card__head{ display:flex; align-items: start; justify-content: space-between; gap:.5rem; }
+.serv-card__title{ font-size: 1.05rem; font-weight: 700; }
+.serv-card__category{ font-size: .8rem; opacity: .8; }
+.serv-card__excerpt{ color: var(--text-muted, #555); }
+.serv-card__actions{ display:flex; gap:.5rem; }
+
+/* Detalles expandibles accesibles */
+.serv-card details summary{ cursor: pointer; font-weight:600; list-style: none; }
+.serv-card details[open] summary .summary__label--more{ display:none; }
+.serv-card details:not([open]) .summary__label--less{ display:none; }
+
+/* Helpers */
+.visually-hidden{ position:absolute !important; width:1px; height:1px; margin:-1px; padding:0; border:0; clip: rect(0 0 0 0); overflow:hidden; }
