@@ -441,4 +441,50 @@ body.menu-open::before {
     }
 }
 
+/* ================================
+   CLAMP DE DESCRIPCIÓN EN SERVICIOS
+   Muestra solo una pequeña línea y permite expandir
+   ================================ */
+
+/* Contenedor de cada item de servicio */
+.servicio {
+  position: relative; /* base para futuros badges o acciones */
+}
+
+/* Descripción colapsada por defecto (1–2 líneas) */
+.servicio .service-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;           /* ajusta a 1 o 2 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 3.2em;               /* respaldo para navegadores sin line-clamp */
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+/* Cuando el item está expandido, mostramos todo el texto */
+.servicio.expanded .service-desc {
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
+}
+
+/* Botón “Ver más / Ver menos” */
+.servicio .toggle-desc {
+  display: inline-block;
+  margin-top: 6px;
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  color: inherit;
+  opacity: 0.9;
+}
+
+.servicio .toggle-desc:focus {
+  outline: 2px dashed currentColor; /* accesibilidad */
+  outline-offset: 2px;
+}
 

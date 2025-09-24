@@ -75,13 +75,23 @@ export async function renderServices(listSelector){
       ul.innerHTML = '<li>No hay servicios disponibles por ahora.</li>';
       return;
     }
+    
     ul.innerHTML = items.map(s => `
       <li class="servicio">
-        ${s.imageUrl ? `<img src="${s.imageUrl}" alt="${s.name}" loading="lazy">` : ''}
         <div>
-          <h3>${s.name}</h3>
-          ${s.description ? `<p>${s.description}</p>` : ''}
-          <strong>${s.price ? `$${s.price}` : ''}${s.duration ? ` · ${s.duration} min` : ''}</strong>
+        <!-- Título del servicio -->
+          <h3 class="service-title">${s.name ?? 'Servicio'}</h3>
+
+           <!-- Descripción colapsable: por defecto se muestra poco texto -->
+          <p class="service-desc">${s.description ?? ''}</p>
+
+          <!-- Acción de expansión/colapso accesible -->
+        <button class="toggle-desc" type="button" aria-expanded="false" aria-label="Ver descripción completa">
+        Ver más
+        </button>
+
+ 
+          <strong>${s.price ? `$${s.price}` : ''}${s.duration ? ` · ${s.duration} días` : ''}</strong>
         </div>
       </li>
     `).join('');
@@ -89,6 +99,24 @@ export async function renderServices(listSelector){
     console.error('renderServices', err);
     ul.innerHTML = '<li>Error cargando servicios.</li>';
   }
+  // ================================
+// BLOQUE: Delegación de eventos para "Ver más / Ver menos"
+// ================================
+ul.addEventListener('click', (ev) => {
+  const btn = ev.target.closest('.toggle-desc');
+  if (!btn) return;
+
+  const item = btn.closest('.servicio');
+  if (!item) return;
+
+  // Alterna el estado visual
+  const expanded = item.classList.toggle('expanded');
+
+  // Accesibilidad y texto del botón
+  btn.setAttribute('aria-expanded', String(expanded));
+  btn.textContent = expanded ? 'Ver menos' : 'Ver más';
+});
+
 }
 
 // -------------------------
