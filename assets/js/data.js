@@ -118,6 +118,9 @@ ul.addEventListener('click', (ev) => {
   btn.textContent = expanded ? 'Ver menos' : 'Ver más';
 });
 
+// 📌 Importante: instalar buscador DESPUÉS de pintar la lista
+setupServiceSearch();
+
 // Utilidad: crea un slug único a partir del título
 const toSlug = (text, i) => {
   const base = (text ?? 'servicio')
@@ -229,6 +232,77 @@ const toSlug = (text, i) => {
   });
 })();
 
+// ================================
+// BLOQUE: Buscador con soporte móvil (submit) y highlight
+// ================================
+let _searchSetupDone = false; // evita doble-binding
+
+function setupServiceSearch() {
+  if (_searchSetupDone) return;
+  const form = document.getElementById('form-buscar');
+  const input = document.getElementById('q');
+  const feedback = document.getElementById('search-feedback');
+  const ul = document.getElementById('lista-servicios');
+
+  if (!form || !input || !ul) return;
+
+  const clearHighlights = () => {
+    ul.querySelectorAll('.servicio.highlight').forEach(el => el.classList.remove('highlight'));
+  };
+
+  const findFirstMatch = (q) => {
+    const needle = (q || '').trim().toLowerCase();
+    if (!needle) return null;
+    const items = [...ul.querySelectorAll('.servicio')];
+    for (const li of items) {
+      const title = (li.querySelector('.service-title')?.textContent || '').toLowerCase();
+      const desc  = (li.querySelector('.service-desc')?.textContent || '').toLowerCase();
+      if (title.includes(needle) || desc.includes(needle)) return li;
+    }
+    return null;
+  };
+
+  const goSearch = () => {
+    clearHighlights();
+    const q = input.value;
+    const match = findFirstMatch(q);
+
+    if (!match) {
+      feedback.textContent = q?.trim()
+        ? `Sin resultados para “${q.trim()}”.`
+        : 'Escribí algo para buscar.';
+      return;
+    }
+
+    match.classList.add('expanded', 'highlight');
+    const btnToggle = match.querySelector('.toggle-desc');
+    if (btnToggle) {
+      btnToggle.setAttribute('aria-expanded', 'true');
+      btnToggle.textContent = 'Ver menos';
+    }
+    match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const title = match.querySelector('.service-title')?.textContent || 'Servicio';
+    feedback.textContent = `Mostrando: ${title}`;
+    setTimeout(() => match.classList.remove('highlight'), 2400);
+    if (match.id) history.replaceState(null, '', `#${match.id}`);
+  };
+
+  // ✅ MÓVIL: el botón del teclado envía el form -> prevenimos recarga
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    goSearch();
+  });
+
+  // Enter físico (por si acaso)
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      goSearch();
+    }
+  });
+
+  _searchSetupDone = true;
+}
 
 }
 
