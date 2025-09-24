@@ -544,3 +544,74 @@ body.menu-open::before {
   max-height: none;
   overflow: visible;
 }
+
+/* ================================
+   BUSCADOR DE SERVICIOS
+   ================================ */
+.service-search { margin-bottom: 1rem; }
+.service-search__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .5rem;
+}
+.service-search input[type="search"] {
+  width: 100%;
+  padding: .65rem .8rem;
+  border: 1px solid var(--border, #ccc);
+  border-radius: .6rem;
+  background: var(--bg, #fff);
+  color: inherit;
+  -webkit-appearance: none; /* iOS: quita estilos raros */
+}
+.service-search button {
+  padding: .65rem 1rem;
+  border-radius: .6rem;
+  border: 1px solid transparent;
+  background: var(--accent, #b38bff);
+  color: #111;
+  cursor: pointer;
+}
+
+/* ================================
+   HIGHLIGHT DEL RESULTADO
+   ================================ */
+@keyframes svcHighlight {
+  0%   { box-shadow: 0 0 0 0 rgba(255,215,0,.9); background: rgba(255,235,130,.25); }
+  60%  { box-shadow: 0 0 0 .5rem rgba(255,215,0,0); background: rgba(255,235,130,.15); }
+  100% { box-shadow: 0 0 0 0 rgba(255,215,0,0); background: transparent; }
+}
+.servicio.highlight {
+  animation: svcHighlight 2.2s ease-out 1;
+  border-radius: .8rem;
+}
+
+/* Colapsado por defecto */
+.servicio .service-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      /* cambia a 1 si querés una línea */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 3.2em;
+  line-height: 1.6;
+  opacity: .95;
+}
+
+/* Expandido */
+.servicio.expanded .service-desc {
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
+}
+
+.servicio .toggle-desc {
+  display: inline-block;
+  margin-top: 6px;
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  color: inherit;
+  opacity: .9;
+}

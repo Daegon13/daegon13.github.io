@@ -48,17 +48,16 @@
 </header>
 <main class="container servicios">
 
-  <!-- ================================
-     BUSCADOR DE SERVICIOS (MVP)
+<!-- ================================
+     BUSCADOR DE SERVICIOS (MVP móvil-proof)
      ================================ -->
 <section class="service-search" aria-label="Buscar servicios">
-  <label for="q" class="sr-only">Buscar servicios</label>
-  <div class="service-search__row">
-    <input id="q" type="search" placeholder="Buscar por título o descripción..." />
-    <button id="btn-buscar" type="button">Buscar</button>
-  </div>
+  <form id="form-buscar" class="service-search__row" role="search">
+    <label for="q" class="sr-only">Buscar servicios</label>
+    <input id="q" type="search" placeholder="Buscar por título o descripción..." autocomplete="off" />
+    <button id="btn-buscar" type="submit">Buscar</button>
+  </form>
   <p id="search-feedback" class="service-search__feedback" aria-live="polite"></p>
-</section>
 
 <ul id="lista-servicios"></ul>
 
