@@ -488,3 +488,59 @@ body.menu-open::before {
   outline-offset: 2px;
 }
 
+/* ================================
+   BUSCADOR DE SERVICIOS
+   ================================ */
+.service-search {
+  margin-bottom: 1rem;
+}
+.service-search__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .5rem;
+}
+.service-search input[type="search"] {
+  width: 100%;
+  padding: .65rem .8rem;
+  border: 1px solid var(--border, #ccc);
+  border-radius: .6rem;
+  background: var(--bg, #111);
+  color: inherit;
+}
+.service-search button {
+  padding: .65rem 1rem;
+  border-radius: .6rem;
+  border: 1px solid transparent;
+  background: var(--accent, #b38bff);
+  color: #111;
+  cursor: pointer;
+}
+.service-search button:focus {
+  outline: 2px dashed currentColor;
+  outline-offset: 2px;
+}
+.service-search__feedback {
+  margin-top: .5rem;
+  font-size: .9rem;
+  opacity: .85;
+}
+
+/* ================================
+   HIGHLIGHT DEL RESULTADO
+   ================================ */
+@keyframes svcHighlight {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.9); background: rgba(255, 235, 130, .25); }
+  60%  { box-shadow: 0 0 0 .5rem rgba(255, 215, 0, 0); background: rgba(255, 235, 130, .15); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); background: transparent; }
+}
+.servicio.highlight {
+  animation: svcHighlight 2.2s ease-out 1;
+  border-radius: .8rem;
+}
+
+/* Asegura visibilidad al expandir el encontrado */
+.servicio.highlight .service-desc {
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
+}

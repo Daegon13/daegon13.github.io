@@ -90,7 +90,8 @@ export async function renderServices(listSelector){
         Ver más
         </button>
 
- 
+          <!-- Meta -->
+        <div class="meta">
           <strong>${s.price ? `$${s.price}` : ''}${s.duration ? ` · ${s.duration} días` : ''}</strong>
         </div>
       </li>
@@ -116,6 +117,118 @@ ul.addEventListener('click', (ev) => {
   btn.setAttribute('aria-expanded', String(expanded));
   btn.textContent = expanded ? 'Ver menos' : 'Ver más';
 });
+
+// Utilidad: crea un slug único a partir del título
+const toSlug = (text, i) => {
+  const base = (text ?? 'servicio')
+    .toString()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quita acentos
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+  return `svc-${base || 'item'}-${i}`;
+};
+
+// ================================
+// BLOQUE: Buscador de servicios con scroll y highlight
+// ================================
+(function setupServiceSearch() {
+  const input = document.getElementById('q');
+  const btn = document.getElementById('btn-buscar');
+  const feedback = document.getElementById('search-feedback');
+  const ul = document.getElementById('lista-servicios');
+
+  if (!input || !btn || !ul) return;
+
+  // Limpia highlight previo
+  const clearHighlights = () => {
+    ul.querySelectorAll('.servicio.highlight').forEach(el => el.classList.remove('highlight'));
+  };
+
+  // Busca primer match por título o descripción
+  const findFirstMatch = (q) => {
+    if (!q) return null;
+    const needle = q.trim().toLowerCase();
+    if (!needle) return null;
+
+    const items = [...ul.querySelectorAll('.servicio')];
+    for (const li of items) {
+      const title = (li.querySelector('.service-title')?.textContent || '').toLowerCase();
+      const desc  = (li.querySelector('.service-desc')?.textContent || '').toLowerCase();
+      if (title.includes(needle) || desc.includes(needle)) {
+        return li;
+      }
+    }
+    return null;
+  };
+
+  // Ejecuta búsqueda, hace scroll suave y resalta
+  const goSearch = () => {
+    clearHighlights();
+    const q = input.value;
+    const match = findFirstMatch(q);
+
+    if (!match) {
+      feedback.textContent = q?.trim()
+        ? `Sin resultados para “${q.trim()}”.`
+        : 'Escribí algo para buscar.';
+      return;
+    }
+
+    // Expande el item (para ver más texto si aplica)
+    match.classList.add('expanded');
+
+    // Actualiza botón del ítem expandido si existe
+    const btnToggle = match.querySelector('.toggle-desc');
+    if (btnToggle) {
+      btnToggle.setAttribute('aria-expanded', 'true');
+      btnToggle.textContent = 'Ver menos';
+    }
+
+    // Resalta y hace scroll
+    match.classList.add('highlight');
+    match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Feedback accesible
+    const title = match.querySelector('.service-title')?.textContent || 'Servicio';
+    feedback.textContent = `Mostrando: ${title}`;
+
+    // Quita el highlight visual luego de un rato (opcional)
+    setTimeout(() => match.classList.remove('highlight'), 2400);
+
+    // Ancla en URL (útil para compartir el resultado)
+    if (match.id) {
+      history.replaceState(null, '', `#${match.id}`);
+    }
+  };
+
+  // Click en botón
+  btn.addEventListener('click', goSearch);
+
+  // Enter en input
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      goSearch();
+    }
+  });
+
+  // Si llega con hash (ej: .../servicios.html#svc-x), enfocar y resaltar
+  window.addEventListener('load', () => {
+    const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+    if (target && ul.contains(target)) {
+      target.classList.add('expanded', 'highlight');
+      const btnToggle = target.querySelector('.toggle-desc');
+      if (btnToggle) {
+        btnToggle.setAttribute('aria-expanded', 'true');
+        btnToggle.textContent = 'Ver menos';
+      }
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => target.classList.remove('highlight'), 2400);
+    }
+  });
+})();
+
 
 }
 
