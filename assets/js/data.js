@@ -59,14 +59,41 @@ function toggleSection(selector, show){
 }
 
 // -------------------------
-// BLOQUE: Render de servicios en páginas públicas
+// BLOQUE: Util — detectar categoría por URL o data-attr
 // -------------------------
-export async function renderServices(listSelector){
+function detectCategory(fallback = 'roja') {
+  // 1) Prioriza data-attr en <body>
+  const fromAttr = document.body?.dataset?.pagecat;
+  if (fromAttr) return fromAttr;
+
+  // 2) Si no hay attr, deduce por pathname
+  const p = location.pathname.toLowerCase();
+  if (p.includes('magia-blanca')) return 'blanca';
+  if (p.includes('magia-roja'))   return 'roja';
+
+  // 3) Último recurso
+  return fallback;
+}
+
+// -------------------------
+// BLOQUE: Render de servicios por categoría
+// -------------------------
+export async function renderServices(listSelector, category) {
   const ul = document.querySelector(listSelector);
   if (!ul) return;
+
+  // Asegura categoría
+  const cat = (category || detectCategory('roja')).toLowerCase();
+
   ul.innerHTML = '<li>Cargando…</li>';
   try {
-    const q = query(collection(db, 'services'), where('active','==', true), orderBy('order','asc'));
+    // Consulta: solo activos de la categoría indicada
+    const q = query(
+      collection(db, 'services'),
+      where('active', '==', true),
+      where('category', '==', cat),
+      orderBy('order', 'asc')
+    );
     const snap = await getDocs(q);
     const items = [];
     snap.forEach(d => items.push({ id: d.id, ...d.data() }));
@@ -75,6 +102,7 @@ export async function renderServices(listSelector){
       ul.innerHTML = '<li>No hay servicios disponibles por ahora.</li>';
       return;
     }
+
     
     ul.innerHTML = items.map(s => `
       <li class="servicio">

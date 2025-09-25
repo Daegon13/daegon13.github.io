@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Panel de Administración — Cristal Sagrado</title>
   <link rel="stylesheet" href="styles.css" />
+  
+  
 
   <!-- Firebase SDK (modular) -->
   <!-- Carga mínima: app, auth y firestore. Versiones recientes. -->
@@ -38,9 +40,11 @@
   <main class="container">
     <aside class="sidebar">
       <nav>
-        <button class="tablink active" data-tab="tab-config">Configuración</button>
-        <button class="tablink" data-tab="tab-servicios">Magia roja</button>
-      </nav>
+  <button class="tablink active" data-tab="tab-config">Configuración</button>
+    <a class="tablink" data-tab="tab-servicios" href="?cat=roja">Magia roja</a>
+    <a class="tablink" data-tab="tab-servicios" href="?cat=blanca">Magia blanca</a>
+    </nav>
+
     </aside>
 
     <section class="content">
@@ -102,7 +106,7 @@
       <!-- TAB: Gestión de servicios -->
       <section id="tab-servicios" class="tab">
         <div class="tabhead">
-          <h2>Magia roja</h2>
+          <h2>Servicios</h2>
           <div class="tabhead__actions">
             <button id="btnNewService" class="btn">Nuevo servicio</button>
           </div>

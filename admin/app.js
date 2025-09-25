@@ -1,322 +1,406 @@
 // Archivo: /admin/app.js
-// RESPONSABILIDAD: Maneja autenticación, tabs, y CRUD con Firestore.
-// Esta versión es *tolerante a cambios en el HTML*: si agregás/quitás campos del formulario
-// del servicio, el código no rompe. Mapea dinámicamente todos los inputs por su atributo "name".
+// RESPONSABILIDAD: Login, tabs y CRUD de Settings/Services en Firestore
+// con soporte de CATEGORÍAS (?cat=roja|blanca) y CERO índices compuestos.
+// Mantiene IDs del HTML del repo: authOverlay, formLogin, authMsg, btnLogout, userEmail,
+// formSettings, settingsSaved, servicesList, btnNewService, serviceModal, formService, closeServiceModal.
 
+// ===============================
+// 1) IMPORTS + INIT FIREBASE
+// ===============================
+// [Bloque] Carga de SDK modular y configuración del proyecto.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, collection, query, orderBy, getDocs, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+import {
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, setDoc, collection, query, where,
+  getDocs, addDoc, updateDoc, deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 import { firebaseConfig, ALLOWED_EMAILS } from "./config.js";
 
-// -------------------------
-// BLOQUE: Inicialización Firebase
-// -------------------------
-const app = initializeApp(firebaseConfig);
+// [Bloque] Inicialización única de Firebase.
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db   = getFirestore(app);
 
-// -------------------------
-// BLOQUE: Selectores de UI (IDs críticos que NO deben cambiar)
-// -------------------------
-const authOverlay = document.getElementById('authOverlay');
-const formLogin = document.getElementById('formLogin');
-const authMsg = document.getElementById('authMsg');
-const btnLogout = document.getElementById('btnLogout');
-const userEmail = document.getElementById('userEmail');
+// ===============================
+// 2) ESTADO DE CATEGORÍA (declarado antes de cualquier uso)
+// ===============================
+// [Bloque] Determina la categoría activa desde la URL (?cat=roja|blanca) con 'roja' por defecto.
+let CATEGORY = (new URLSearchParams(location.search).get("cat") || "roja").toLowerCase();
 
-const tabLinks = document.querySelectorAll('.tablink');
-const tabs = document.querySelectorAll('.tab');
+// [Bloque] Asegura que todo payload guardado lleve la categoría activa.
+function ensureCategoryOnData(obj) {
+  const data = { ...(obj || {}) };
+  data.category = CATEGORY;
+  return data;
+}
 
-const formSettings = document.getElementById('formSettings');
-const settingsSaved = document.getElementById('settingsSaved');
+// ===============================
+// 3) SELECTORES DE UI
+// ===============================
+// [Bloque] Referencias a elementos del DOM usados por el panel.
+const authOverlay   = document.getElementById("authOverlay");
+const formLogin     = document.getElementById("formLogin");
+const authMsg       = document.getElementById("authMsg");
+const btnLogout     = document.getElementById("btnLogout");
+const userEmail     = document.getElementById("userEmail");
 
-const servicesList = document.getElementById('servicesList');
-const btnNewService = document.getElementById('btnNewService');
-const serviceModal = document.getElementById('serviceModal'); // <dialog> obligatoriamente con este id
-const formService = document.getElementById('formService');   // <form> obligatoriamente con este id
+const tabLinks      = document.querySelectorAll(".tablink");
+const tabs          = document.querySelectorAll(".tab");
 
-// -------------------------
-// BLOQUE: Utils UI
-// -------------------------
-function setActiveTab(tabId){
+const formSettings  = document.getElementById("formSettings");
+const settingsSaved = document.getElementById("settingsSaved");
+
+const servicesList  = document.getElementById("servicesList");
+const btnNewService = document.getElementById("btnNewService");
+const serviceModal  = document.getElementById("serviceModal");
+const formService   = document.getElementById("formService");
+const btnCloseModal = document.getElementById("closeServiceModal");
+
+// ===============================
+// 4) UTILIDADES DE UI
+// ===============================
+// [Bloque] Activación visual de tabs sin recargar.
+function setActiveTab(tabId) {
   if (!tabs?.length) return;
-  tabs.forEach(t => t.classList.toggle('active', t.id === tabId));
-  tabLinks.forEach(l => l.classList.toggle('active', l.dataset.tab === tabId));
+  tabs.forEach(t => t.classList.toggle("active", t.id === tabId));
+  tabLinks.forEach(l => l.classList.toggle("active", l.dataset.tab === tabId));
 }
 
-tabLinks.forEach(b => b.addEventListener('click', () => setActiveTab(b.dataset.tab)));
-
-function toastSaved(el){
+// [Bloque] Notificación visual de guardado.
+function toastSaved(el) {
   if (!el) return;
-  el.textContent = 'Guardado ✔';
-  setTimeout(() => el.textContent = '', 1500);
+  el.textContent = "Guardado ✔";
+  setTimeout(() => el.textContent = "", 1500);
 }
 
-// Helper seguro para obtener/poner valores por nombre de campo
+// [Bloque] Helpers de formularios (mapeo por atributo name).
 function getControl(form, name){ return form?.elements?.namedItem(name) ?? null; }
 function setValue(ctrl, value){
   if (!ctrl) return;
-  if (ctrl.type === 'checkbox') ctrl.checked = Boolean(value);
-  else ctrl.value = value ?? '';
+  if (ctrl.type === "checkbox") ctrl.checked = Boolean(value);
+  else ctrl.value = (value ?? "");
 }
 function getValue(ctrl){
   if (!ctrl) return undefined;
-  if (ctrl.type === 'checkbox') return Boolean(ctrl.checked);
-  if (ctrl.type === 'number') return ctrl.value === '' ? null : Number(ctrl.value);
+  if (ctrl.type === "checkbox") return Boolean(ctrl.checked);
+  if (ctrl.type === "number")   return ctrl.value === "" ? null : Number(ctrl.value);
   return ctrl.value;
 }
 
-// Construye payload leyendo TODOS los campos con atributo name del form
-function formToPayload(form){
+// [Bloque] Serializa TODOS los campos con name del form, añade updatedAt y category.
+function formToPayload(form) {
   const payload = {};
-  if (!form) return payload;
-  Array.from(form.elements).forEach(el => {
-    if (!el.name) return;
-    // Ignora el campo oculto id (lo manejamos aparte)
-    if (el.name === 'id') return;
-    payload[el.name] = getValue(el);
-  });
+  if (form) {
+    Array.from(form.elements).forEach(el => {
+      if (!el.name || el.name === "id") return; // id se gestiona aparte
+      payload[el.name] = getValue(el);
+    });
+  }
   payload.updatedAt = new Date().toISOString();
-  return payload;
+  return ensureCategoryOnData(payload);
 }
 
-// Rellena el form con el objeto data (nombre de propiedad === name del input)
+// [Bloque] Rellena un form con datos (propiedad === name).
 function fillForm(form, data){
   if (!form) return;
   Array.from(form.elements).forEach(el => {
     if (!el.name) return;
-    const val = data?.[el.name];
-    // Si es "active" y no hay dato, por defecto true
-    if (el.name === 'active' && typeof val === 'undefined') {
+    if (el.name === "active" && typeof data?.[el.name] === "undefined") {
       setValue(el, true);
     } else {
-      setValue(el, val);
+      setValue(el, data?.[el.name]);
     }
   });
 }
 
-// -------------------------
-// BLOQUE: Autenticación (login/logout) + guard de emails permitidos
-// -------------------------
-formLogin?.addEventListener('submit', async (e) => {
+// [Bloque] Open/Close <dialog> con fallback seguro.
+function openDialogSafe(dlg){
+  if (!dlg) return;
+  if (typeof dlg.showModal === "function") dlg.showModal();
+  else dlg.setAttribute("open", "true");
+}
+function closeDialogSafe(dlg){
+  if (!dlg) return;
+  if (typeof dlg.close === "function") dlg.close();
+  else dlg.removeAttribute("open");
+}
+
+// [Bloque] Ajusta el título del tab de servicios según la categoría activa.
+function setServicesTitleIfPresent() {
+  const h2  = document.querySelector('#tab-servicios h2');
+  const alt = document.getElementById('servicesTitle');
+  const label = (CATEGORY === 'blanca') ? 'Magia blanca' : 'Magia roja';
+  if (h2)  h2.textContent  = label;
+  if (alt) alt.textContent = label;
+}
+setServicesTitleIfPresent();
+
+// ===============================
+// 5) NAVEGACIÓN (links de categoría y tabs)
+// ===============================
+// [Bloque] Intercepta solo los enlaces con ?cat= para SPA (sin recarga).
+tabLinks.forEach(b => {
+  b.addEventListener("click", (e) => {
+    const href = b.getAttribute("href") || "";
+    if (href.includes("?cat=")) {
+      e.preventDefault();
+      const newCat = (new URL(href, location.href).searchParams.get("cat") || "roja").toLowerCase();
+      if (newCat !== CATEGORY) {
+        CATEGORY = newCat;             // cambia estado
+        setServicesTitleIfPresent();   // actualiza cabecera del tab
+        loadServices();                // recarga lista filtrada
+      }
+      history.replaceState(null, "", `?cat=${CATEGORY}`); // sincroniza URL
+      setActiveTab("tab-servicios");   // enfoca el tab de servicios
+      return;
+    }
+    // Comportamiento normal para tabs sin ?cat=
+    setActiveTab(b.dataset.tab);
+  });
+});
+
+// ===============================
+// 6) AUTENTICACIÓN (login/logout + whitelist)
+// ===============================
+// [Bloque] Login por email/pass con whitelist de correos permitidos.
+formLogin?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = new FormData(formLogin);
-  const email = data.get('email');
-  const password = data.get('password');
+  const email = data.get("email");
+  const password = data.get("password");
   try {
     const cred = await signInWithEmailAndPassword(auth, email, password);
     if (!ALLOWED_EMAILS.includes(cred.user.email)) {
       await signOut(auth);
-      authMsg.textContent = 'Este usuario no está autorizado para el panel.';
+      authMsg.textContent = "Este usuario no está autorizado para el panel.";
     }
   } catch (err) {
     console.error(err);
-    authMsg.textContent = 'Error de acceso. Verifica tus datos.';
+    authMsg.textContent = "Error de acceso. Verifica tus datos.";
   }
 });
 
-btnLogout?.addEventListener('click', () => signOut(auth));
+// [Bloque] Cierre de sesión.
+btnLogout?.addEventListener("click", () => signOut(auth));
 
+// [Bloque] Guardia de sesión y carga inicial.
 onAuthStateChanged(auth, async (user) => {
-  try {
-    const loggedIn = !!user && ALLOWED_EMAILS.includes(user.email);
-    if (authOverlay) authOverlay.style.display = loggedIn ? 'none' : 'grid';
-    if (userEmail) userEmail.textContent = loggedIn ? user.email : '';
-    if (loggedIn) {
-      await loadSettings();
-      await loadServices();
-    } else {
-      if (servicesList) servicesList.innerHTML = '';
-    }
-  } catch (err){
-    console.error('onAuthStateChanged error:', err);
+  if (!user) {
+    if (authOverlay) authOverlay.style.display = "flex";
+    return;
   }
+  if (authOverlay) authOverlay.style.display = "none";
+  if (userEmail)   userEmail.textContent = user.email;
+
+  await loadSettings();
+  await loadServices();
 });
 
-// -------------------------
-// BLOQUE: Configuración (doc único: settings/global)
-// -------------------------
-const settingsRef = doc(db, 'settings', 'global');
-
+// ===============================
+// 7) SETTINGS (site)
+// ===============================
+// [Bloque] Lectura de configuración global.
 async function loadSettings(){
-  if (!formSettings) return;
   try {
-    const snap = await getDoc(settingsRef);
-    const data = snap.exists() ? snap.data() : {};
-    // Campos fijos del MVP (si eliminás alguno del HTML, esto no rompe)
-    setValue(getControl(formSettings, 'title'), data.title ?? '');
-    setValue(getControl(formSettings, 'subtitle'), data.subtitle ?? '');
-    setValue(getControl(formSettings, 'primaryColor'), data.primaryColor ?? '#7a3cff');
-    setValue(getControl(formSettings, 'whatsapp'), data.whatsapp ?? '');
-    setValue(getControl(formSettings, 'email'), data.email ?? '');
-    setValue(getControl(formSettings, 'instagram'), data.instagram ?? '');
-    setValue(getControl(formSettings, 'heroImage'), data.heroImage ?? '');
-    const ss = getControl(formSettings, 'show_services'); if (ss) ss.checked = data.show_services ?? true;
-    const sf = getControl(formSettings, 'show_faq'); if (sf) sf.checked = data.show_faq ?? true;
-    const st = getControl(formSettings, 'show_tarot'); if (st) st.checked = data.show_tarot ?? true;
-  } catch (err){
-    console.error('Error cargando settings', err);
+    const ref = doc(db, "settings", "site");
+    const snap = await getDoc(ref);
+    if (snap.exists()) fillForm(formSettings, snap.data());
+  } catch (err) {
+    console.error("Error cargando settings:", err);
   }
 }
 
-formSettings?.addEventListener('submit', async (e) => {
+// [Bloque] Guardado de configuración global.
+formSettings?.addEventListener("submit", async (e) => {
   e.preventDefault();
   try {
-    const fd = new FormData(formSettings);
-    const payload = {
-      title: fd.get('title'),
-      subtitle: fd.get('subtitle'),
-      primaryColor: fd.get('primaryColor'),
-      whatsapp: fd.get('whatsapp'),
-      email: fd.get('email'),
-      instagram: fd.get('instagram'),
-      heroImage: fd.get('heroImage'),
-      show_services: getControl(formSettings,'show_services')?.checked ?? true,
-      show_faq: getControl(formSettings,'show_faq')?.checked ?? true,
-      show_tarot: getControl(formSettings,'show_tarot')?.checked ?? true,
-      updatedAt: new Date().toISOString()
-    };
-    await setDoc(settingsRef, payload, { merge: true });
+    const payload = formToPayload(formSettings);
+    await setDoc(doc(db, "settings", "site"), payload, { merge: true });
     toastSaved(settingsSaved);
-  } catch (err){
-    console.error('Error guardando settings', err);
+  } catch (err) {
+    console.error("Error guardando settings:", err);
   }
 });
 
-// -------------------------
-// BLOQUE: Servicios (colección: services)
-// -------------------------
-const colServices = collection(db, 'services');
-
-async function loadServices(){
+// ===============================
+// 8) SERVICES (CRUD por categoría, sin índices compuestos)
+// ===============================
+// [Bloque] Lista servicios de la categoría activa (order en cliente).
+async function loadServices() {
   if (!servicesList) return;
-  servicesList.innerHTML = '<li class="muted">Cargando…</li>';
+  servicesList.innerHTML = `<li class="muted">Cargando…</li>`;
   try {
-    const q = query(colServices, orderBy('order', 'asc'));
+    // Consulta sin orderBy para evitar índice compuesto: se ordena en cliente.
+    const q = query(
+      collection(db, "services"),
+      where("category", "==", CATEGORY)
+    );
     const snap = await getDocs(q);
-    const items = [];
-    snap.forEach(docu => items.push(renderServiceItem(docu.id, docu.data())));
-    servicesList.innerHTML = '';
-    if (items.length === 0) {
-      servicesList.innerHTML = '<li class="muted">Sin servicios aún.</li>';
-    } else {
-      items.forEach(el => servicesList.appendChild(el));
+
+    // Migración automática 1-shot: si en "roja" no hay nada, etiqueta huérfanos como 'roja'
+    if (snap.empty && CATEGORY === "roja") {
+      const migrated = await migrateMissingCategoryToRoja();
+      if (migrated > 0) return loadServices();
     }
-  } catch (err){
-    console.error('Error listando servicios', err);
-    servicesList.innerHTML = '<li class="muted">No se pudo cargar.</li>';
+
+    const items = [];
+    snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+
+    // Ordena en memoria por 'order' asc (fallback a 0).
+    items.sort((a,b) => (a.order ?? 0) - (b.order ?? 0));
+
+    if (items.length === 0) {
+      servicesList.innerHTML = `<li class="muted">No hay servicios en esta categoría.</li>`;
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    for (const s of items) {
+      const li = document.createElement("li");
+      li.className = "service-item";
+      li.dataset.id = s.id;
+      li.innerHTML = `
+        <div class="item-head">
+          <strong>${s.title ?? s.name ?? ""}</strong>
+          <span class="muted">#${s.order ?? 0} · ${s.active ? "Activo" : "Inactivo"}</span>
+        </div>
+        <p class="item-desc">${s.description ?? ""}</p>
+        <div class="item-actions">
+          <button data-act="up"    title="Subir">↑</button>
+          <button data-act="down"  title="Bajar">↓</button>
+          <button data-act="edit">Editar</button>
+          <button data-act="del"   class="danger">Eliminar</button>
+        </div>
+      `;
+      li.querySelector('[data-act="edit"]')?.addEventListener("click", () => openEditService(s));
+      li.querySelector('[data-act="del"]') ?.addEventListener("click", () => deleteService(s.id));
+      li.querySelector('[data-act="up"]')  ?.addEventListener("click", () => reorderSwapWithinCategory(s.id, -1));
+      li.querySelector('[data-act="down"]')?.addEventListener("click", () => reorderSwapWithinCategory(s.id, +1));
+      frag.appendChild(li);
+    }
+    servicesList.innerHTML = "";
+    servicesList.appendChild(frag);
+  } catch (err) {
+    console.error("Error listando servicios:", err);
+    servicesList.innerHTML = `<li class="error">Error al cargar servicios.</li>`;
   }
 }
 
-function renderServiceItem(id, d){
-  const li = document.createElement('li');
-  li.className = 'list__item';
-  li.dataset.id = id;
-  const estado = d.active ? 'Activo' : 'Inactivo';
-  const linea2 = [estado]
-    .concat(typeof d.duration === 'number' ? [`${d.duration} días`] : [])
-    .concat(typeof d.price === 'number' ? [`$${d.price}`] : [])
-    .join(' · ');
-  li.innerHTML = `
-    <div class="item__main">
-      <strong>${d.name ?? '(Sin nombre)'}</strong>
-      <span class="muted">${linea2}</span>
-    </div>
-    <div class="item__actions">
-      <button class="btn btn--ghost" data-action="up" title="Subir">▲</button>
-      <button class="btn btn--ghost" data-action="down" title="Bajar">▼</button>
-      <button class="btn btn--ghost" data-action="toggle" title="Activar/Inactivar">${d.active ? 'Desactivar' : 'Activar'}</button>
-      <button class="btn" data-action="edit">Editar</button>
-      <button class="btn btn--danger" data-action="delete">Borrar</button>
-    </div>
-  `;
-  li.addEventListener('click', async (e) => {
-    const btn = e.target.closest('button');
-    if (!btn) return;
-    const action = btn.dataset.action;
-    try {
-      if (action === 'edit') openServiceModal(id, d);
-      if (action === 'delete') await deleteService(id);
-      if (action === 'toggle') await updateDoc(doc(db, 'services', id), { active: !d.active });
-      if (action === 'up' || action === 'down') await moveService(id, action === 'up' ? -1 : 1);
-      await loadServices();
-    } catch (err){ console.error('Acción item error', err); }
-  });
-  return li;
-}
-
-btnNewService?.addEventListener('click', () => openServiceModal());
-
-function openServiceModal(id = null, data = {}){
-  if (!serviceModal || !formService) return;
-  const titleEl = document.getElementById('serviceModalTitle');
-  if (titleEl) titleEl.textContent = id ? 'Editar servicio' : 'Nuevo servicio';
-  // Carga el id oculto si existe
-  const idCtrl = getControl(formService, 'id');
-  if (idCtrl) idCtrl.value = id ?? '';
-  // Rellenar dinámicamente todos los campos
-  formService.reset?.();
-  fillForm(formService, data || {});
-  // Asegura default de "active" en true si el campo existe y data no lo trae
-  const activeCtrl = getControl(formService, 'active');
-  if (activeCtrl && typeof data.active === 'undefined') activeCtrl.checked = true;
+// [Bloque] Migración: asigna 'roja' a servicios sin 'category' (dataset previo a categorías).
+async function migrateMissingCategoryToRoja() {
   try {
-    serviceModal.showModal?.();
-  } catch (err){
-    console.warn('Dialog no soportado, intentando fallback', err);
-    serviceModal.setAttribute('open',''); // Fallback básico
+    const snapAll = await getDocs(collection(db, "services"));
+    const updates = [];
+    snapAll.forEach(d => {
+      const data = d.data() || {};
+      if (!("category" in data) || data.category === "" || data.category == null) {
+        updates.push(updateDoc(doc(db, "services", d.id), { category: "roja" }));
+      }
+    });
+    await Promise.all(updates);
+    return updates.length;
+  } catch (e) {
+    console.warn("Migración 'category'→'roja' no aplicada:", e?.message || e);
+    return 0;
   }
 }
 
-formService?.addEventListener('submit', async (e) => {
+// [Bloque] Nuevo servicio / Editar servicio (abre modal, precarga y setea category hidden).
+btnNewService?.addEventListener("click", () => openEditService(null));
+function openEditService(service) {
+  if (!formService || !serviceModal) return;
+  formService.reset();
+  formService.dataset.id = service?.id || "";
+
+  if (service) fillForm(formService, service);
+  else {
+    setValue(getControl(formService, "active"), true);
+    setValue(getControl(formService, "order"),  0);
+  }
+
+  // Campo oculto de categoría sincronizado
+  let hidden = getControl(formService, "category");
+  if (!hidden) {
+    hidden = document.createElement("input");
+    hidden.type = "hidden";
+    hidden.name = "category";
+    formService.appendChild(hidden);
+  }
+  hidden.value = CATEGORY;
+
+  openDialogSafe(serviceModal);
+}
+
+// [Bloque] Guardar (create/update) siempre con categoría actual.
+formService?.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!formService) return;
-  try {
-    const idCtrl = getControl(formService, 'id');
-    const id = idCtrl ? idCtrl.value : '';
-    // Construye payload con TODOS los campos (dinámico)
-    const payload = formToPayload(formService);
-    // Defaults útiles para el MVP si no existen en el form
-    if (typeof payload.active === 'undefined') payload.active = true;
 
+  const id   = formService.dataset.id;
+  const data = formToPayload(formService); // incluye category + updatedAt
+
+  try {
     if (id) {
-      await updateDoc(doc(db, 'services', id), payload);
+      await updateDoc(doc(db, "services", id), data);
     } else {
-      // order: usa timestamp si no fue provisto por el form
-      if (typeof payload.order !== 'number') payload.order = Date.now();
-      await addDoc(colServices, payload);
+      await addDoc(collection(db, "services"), data);
     }
-    try { serviceModal.close?.(); } catch (_){ serviceModal.removeAttribute('open'); }
+    closeDialogSafe(serviceModal);
     await loadServices();
-  } catch (err){
-    console.error('Error guardando servicio', err);
+  } catch (err) {
+    console.error("Error guardando servicio:", err);
+    alert("Error al guardar. Revisa la consola.");
   }
 });
 
-async function deleteService(id){
-  if (!confirm('¿Eliminar este servicio?')) return;
+// [Bloque] Eliminar servicio de la categoría mostrada.
+async function deleteService(id) {
+  if (!confirm("¿Eliminar este servicio?")) return;
   try {
-    await deleteDoc(doc(db, 'services', id));
-  } catch (err){
-    console.error('Error eliminando servicio', err);
+    await deleteDoc(doc(db, "services", id));
+    await loadServices();
+  } catch (err) {
+    console.error("Error eliminando servicio:", err);
   }
 }
 
-async function moveService(id, delta){
+// [Bloque] Reordenar ↑/↓ dentro de la categoría activa (orden en cliente, sin índice).
+async function reorderSwapWithinCategory(id, delta, {
+  collectionName = "services",
+  orderField = "order"
+} = {}) {
   try {
-    const q = query(colServices, orderBy('order', 'asc'));
+    // Trae solo la categoría actual (sin orderBy).
+    const q = query(
+      collection(db, collectionName),
+      where("category", "==", CATEGORY)
+    );
     const snap = await getDocs(q);
+
+    // Ordena en memoria por 'order'.
     const arr = [];
-    snap.forEach(d => arr.push({ id: d.id, order: d.data().order ?? 0 }));
+    snap.forEach(d => arr.push({ id: d.id, order: d.data()?.[orderField] ?? 0 }));
+    arr.sort((a,b) => (a.order ?? 0) - (b.order ?? 0));
+
     const idx = arr.findIndex(x => x.id === id);
     if (idx < 0) return;
     const swapIdx = idx + delta;
     if (swapIdx < 0 || swapIdx >= arr.length) return;
+
     const a = arr[idx], b = arr[swapIdx];
-    await updateDoc(doc(db, 'services', a.id), { order: b.order });
-    await updateDoc(doc(db, 'services', b.id), { order: a.order });
-  } catch (err){
-    console.error('Error reordenando', err);
+    await updateDoc(doc(db, collectionName, a.id), { [orderField]: b.order });
+    await updateDoc(doc(db, collectionName, b.id), { [orderField]: a.order });
+
+    await loadServices();
+  } catch (err) {
+    console.error("Error reordenando:", err);
   }
 }
 
+// ===============================
+// 9) CIERRE MODAL (botón ✖ del HTML)
+// ===============================
+// [Bloque] Cerrar el modal desde el botón de la X.
+btnCloseModal?.addEventListener("click", () => closeDialogSafe(serviceModal));

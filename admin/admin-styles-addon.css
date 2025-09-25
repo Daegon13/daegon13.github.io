@@ -1,0 +1,60 @@
+/* Archivo: /admin/styles-addon.css */
+/* ===== Sidebar: enlaces como tabs ===== */
+.sidebar .tablink {
+  display: block;
+  width: 100%;
+  text-align: left;
+  text-decoration: none;
+  color: #ddd;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+.sidebar .tablink:hover {
+  background: #151522;
+}
+.tablink.active {
+  background: #1a1a2b;
+  border-color: var(--border);
+}
+
+/* ===== Items de servicios: compact ===== */
+.service-item {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+}
+.service-item .item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.service-item .item-desc { margin: 8px 0 12px 0; opacity: .95; }
+
+.service-item .item-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ===== Botón cerrar modal (✖) ===== */
+#serviceModal .close-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #ccc;
+}
+#serviceModal .close-btn:hover { color: #fff; }
+
+/* ===== Responsivo admin ===== */
+@media (max-width: 768px){
+  .container { grid-template-columns: 1fr; }
+  .sidebar   { border-right: 0; border-bottom: 1px solid var(--border); }
+  .grid      { grid-template-columns: 1fr; }
+}

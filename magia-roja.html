@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/assets/css/services-public.css">
+    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
 </head>
-<body>
+<body data-pagecat="roja">
 <div class="hamburger-menu" id="hamburgerMenu">
   <span></span>
   <span></span>
@@ -108,13 +110,14 @@ document.body.addEventListener('click', (e) => {
 
 <!-- Lectura de contenido dinámico desde Firestore (público) -->
 <script type="module" src="/assets/js/data.js"></script>
-<script type="module">
-  import { renderServices } from '/assets/js/data.js';
-  // Renderiza servicios si la página tiene una lista destino
-  if (document.querySelector('#lista-servicios')) {
-    renderServices('#lista-servicios');
-  }
-</script>
+  <script type="module">
+    import { renderServices } from '/assets/js/data.js';
+    // Renderiza SOLO servicios de magia roja
+    renderServices('#lista-servicios', 'roja');
+  </script>
+  
+  
+
 <!-- Carga de módulos JS específicos de la página de servicios -->
 <script type="module" src="/assets/js/services/index.js"></script>
 
