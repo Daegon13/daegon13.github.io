@@ -52,15 +52,8 @@
 <!-- ================================
      BUSCADOR DE SERVICIOS (MVP móvil-proof)
      ================================ -->
-<section class="service-search" aria-label="Buscar servicios">
-  <form id="form-buscar" class="service-search__row" role="search">
-    <label for="q" class="sr-only">Buscar servicios</label>
-    <input id="q" type="search" placeholder="Buscar por título o descripción..." autocomplete="off" />
-    <button id="btn-buscar" type="submit">Buscar</button>
-  </form>
-  <p id="search-feedback" class="service-search__feedback" aria-live="polite"></p>
-
-<ul id="lista-servicios"></ul>
+  <input id="buscador-servicios" type="search" placeholder="Buscar servicios…">
+  <ul id="lista-servicios" class="serv-list"></ul>
 
     
     <section class="container">
@@ -107,11 +100,11 @@ document.body.addEventListener('click', (e) => {
      aria-label="Reservar por WhatsApp">💬</a>
 
 <!-- Lectura de contenido dinámico desde Firestore (público) -->
-<script type="module" src="/assets/js/data.js"></script>
+ <script type="module" src="/assets/js/data.js"></script>
   <script type="module">
-    import { renderServices } from '/assets/js/data.js';
-    // Renderiza SOLO servicios de magia blanca
-    renderServices('#lista-servicios', 'blanca');
+    import { renderServices, attachSearch } from "/assets/js/data.js";
+    renderServices("#lista-servicios", "blanca");
+    attachSearch("#buscador-servicios", "#lista-servicios");
   </script>
 <!-- Carga de módulos JS específicos de la página de servicios -->
 <script type="module" src="/assets/js/services/index.js"></script>
