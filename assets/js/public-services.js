@@ -23,6 +23,8 @@ function detectCategory(explicitCategory) {
   const p = location.pathname.toLowerCase();
   if (p.includes("magia-blanca")) return "blanca";
   if (p.includes("magia-roja"))   return "roja";
+  if (p.includes("magia-negra"))   return "negra";
+  if (p.includes("magia-verde"))   return "verde";
   return "roja"; // fallback
 }
 

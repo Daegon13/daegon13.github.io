@@ -26,7 +26,7 @@ const db   = getFirestore(app);
 // ===============================
 // 2) ESTADO DE CATEGORÍA (declarado antes de cualquier uso)
 // ===============================
-// [Bloque] Determina la categoría activa desde la URL (?cat=roja|blanca) con 'roja' por defecto.
+// [Bloque] Determina la categoría activa desde la URL (?cat=roja|blanca|verde|negra) con 'roja' por defecto.
 let CATEGORY = (new URLSearchParams(location.search).get("cat") || "roja").toLowerCase();
 
 // [Bloque] Asegura que todo payload guardado lleve la categoría activa.
@@ -131,7 +131,20 @@ function closeDialogSafe(dlg){
 function setServicesTitleIfPresent() {
   const h2  = document.querySelector('#tab-servicios h2');
   const alt = document.getElementById('servicesTitle');
-  const label = (CATEGORY === 'blanca') ? 'Magia blanca' : 'Magia roja';
+  let label = "Magia roja"; // Valor predeterminado
+
+  switch (CATEGORY) {
+    case 'blanca':
+      label = 'Magia blanca';
+      break;
+    case 'verde':
+      label = 'Magia verde';
+      break;
+    case 'negra':
+      label = 'Magia negra';
+      break;
+  }
+
   if (h2)  h2.textContent  = label;
   if (alt) alt.textContent = label;
 }
@@ -288,24 +301,6 @@ async function loadServices() {
   }
 }
 
-// [Bloque] Migración: asigna 'roja' a servicios sin 'category' (dataset previo a categorías).
-async function migrateMissingCategoryToRoja() {
-  try {
-    const snapAll = await getDocs(collection(db, "services"));
-    const updates = [];
-    snapAll.forEach(d => {
-      const data = d.data() || {};
-      if (!("category" in data) || data.category === "" || data.category == null) {
-        updates.push(updateDoc(doc(db, "services", d.id), { category: "roja" }));
-      }
-    });
-    await Promise.all(updates);
-    return updates.length;
-  } catch (e) {
-    console.warn("Migración 'category'→'roja' no aplicada:", e?.message || e);
-    return 0;
-  }
-}
 
 // [Bloque] Nuevo servicio / Editar servicio (abre modal, precarga y setea category hidden).
 btnNewService?.addEventListener("click", () => openEditService(null));
