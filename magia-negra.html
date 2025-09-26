@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - Cristal Sagrado</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+    
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
+</head>
+<body data-pagecat="negra">
+<div class="hamburger-menu" id="hamburgerMenu">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+<nav class="side-nav" id="sideNav">
+  <ul>
+    <li><a href="magia-roja.html">Magia roja</a></li>
+    <li><a href="magia-blanca.html">Magia blanca</a></li>
+    <li><a href="tarot.html">Tarot</a></li>
+    <li><a href="faq.html">Preguntas Frecuentes</a></li>
+    <li><a href="como-trabajamos.html">¿Cómo trabajamos?</a></li>
+  </ul>
+</nav>
+
+<!-- Sección de video de fondo en la landing page -->
+<section class="landing">
+  <video autoplay muted loop playsinline class="background-video">
+    <source src="images/Eclipse_small.mp4" type="video/mp4">
+    Tu navegador no soporta videos HTML5.
+  </video>
+</section>
+    <!-- Encabezado principal con logo y navegación interna -->
+<header>
+    <div class="container">
+        <a href="index.html" class="logo">Cristal sagrado</a>
+        <nav>
+            <ul>
+            <!-- CTA a WhatsApp con texto prellenado -->
+                    <a class="btn btn--whatsapp" id="ctaWhats" 
+                        href="https://wa.me/59896106373?text=Hola%20Luz,%20quiero%20un%20turno">
+                        Reservar
+                    </a>
+            </ul>
+        </nav>
+    </div>
+</header>
+<main class="container servicios">
+
+<!-- ================================
+     BUSCADOR DE SERVICIOS (MVP móvil-proof)
+     ================================ -->
+<!-- buscador opcional -->
+  <input id="buscador-servicios" type="search" placeholder="Buscar servicios…">
+
+  <ul id="lista-servicios" class="serv-list"></ul>
+
+    
+    <section class="container">
+        <h2>Servicios</h2>
+        <section data-section="services">
+          <ul id="lista-servicios"></ul>
+        </section>
+    </section>
+</main>
+<footer>
+    <div class="container">
+        <p>&copy; 2023 Esoteria. Todos los derechos reservados.</p>
+        <ul class="social-links">
+            <li><a href="https://wa.me/59896106373?text=Hola%20Luz,%20quiero%20un%20turno">Whatsapp</a></li>
+            <li><a href="https://www.instagram.com/cristal.sagrado.uy?utm_source=qr&igsh=MXhlYWJybGNsNHg3eA==">Instagram</a></li>
+        </ul>
+    </div>
+</footer>
+<script>
+const hamburger = document.getElementById('hamburgerMenu');
+const sideNav = document.getElementById('sideNav');
+hamburger.addEventListener('click', () => {
+  sideNav.classList.toggle('open');
+  document.body.classList.toggle('menu-open');
+});
+document.body.addEventListener('click', (e) => {
+  if (
+    sideNav.classList.contains('open') &&
+    !sideNav.contains(e.target) &&
+    !hamburger.contains(e.target)
+  ) {
+    sideNav.classList.remove('open');
+    document.body.classList.remove('menu-open');
+  }
+});
+</script>
+  <!-- 
+    Botón flotante de WhatsApp: 
+    Este botón debe mostrarse solo en dispositivos móviles para facilitar el acceso rápido a la reserva por WhatsApp.
+    Se recomienda ocultarlo en pantallas grandes mediante CSS media queries.
+  -->
+  <a class="wapp-float" id="floatWhats" 
+     href="https://wa.me/59896106373?text=Hola%20Luz,%20quiero%20un%20turno" 
+     aria-label="Reservar por WhatsApp">💬</a>
+
+<!-- Lectura de contenido dinámico desde Firestore (público) -->
+<script type="module" src="/assets/js/data.js"></script>
+  <script type="module">
+    import { renderServices } from '/assets/js/data.js';
+    // Renderiza SOLO servicios de magia roja
+    renderServices('#lista-servicios', 'negra');
+  </script>
+  
+  
+
+<!-- Carga de módulos JS específicos de la página de servicios -->
+<script type="module" src="/assets/js/services/index.js"></script>
+
+  <script type="module" src="/assets/js/data.js"></script>
+  <script type="module">
+    import { renderServices, attachSearch } from "/assets/js/data.js";
+    // Opcional si no usas auto-init:
+    renderServices("#lista-servicios", "negra");
+    attachSearch("#buscador-servicios", "#lista-servicios");
+  </script>
+
+
+</body>
+</html>
