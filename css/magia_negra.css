@@ -1,0 +1,638 @@
+/* Variables CSS para colores y fuentes */
+:root {
+    --color-bg: #3f3f3f2f;
+    --color-bg-light: #640000;
+    --color-primary: #d4af37;
+    --color-primary-hover: #b8952f;
+    --color-text: #ffffff;
+    --color-text-light: #fff;
+    --font-main: 'Roboto', sans-serif;
+    --font-title: 'Playfair Display', serif;
+    --container-max-width: 75rem; /* 1200px aprox */
+    --container-padding: 1.25rem; /* 20px */
+    --border-radius: 0.3125rem; /* 5px */
+    --box-shadow: 0 0.25rem 0.3125rem rgba(255, 255, 255, 0.1);
+}
+
+/* Reset de márgenes, paddings y box-sizing para todos los elementos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo para el video de fondo, ocupa toda la pantalla y queda detrás del contenido */
+.background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; /* Asegura que ocupe el ancho completo */
+  height: 100%; /* Asegura que ocupe la altura completa */
+  object-fit: cover; /* Mantiene la proporción del video */
+  z-index: -1;
+}
+
+/* Estilos generales del body: fuente, color de texto y fondo */
+body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    min-height: 100vh;
+}
+
+/* Contenedor principal para centrar y limitar el ancho del contenido */
+.container {
+    max-width: 100%; /* Cambiado de var(--container-max-width) a 100% */
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+    width: 100%;
+}
+
+/* Header */
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+
+  /* Fondo translúcido */
+  background-color: rgba(110, 110, 110, 0.4); /* Negro con 40% de opacidad */
+
+  /* Difuminado del fondo */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Safari */
+
+  /* Borde sutil */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  /* Transición suave al hacer scroll */
+  transition: background-color 0.3s ease;
+}
+
+/* Header: separación flexible entre hamburguesa y logo, con logo a la izquierda y navegación a la derecha */
+header .container {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  position: relative;
+  justify-content: flex-start; /* Logo y hamburguesa a la izquierda */
+}
+
+/* El logo debe estar al principio, navegación al final */
+header .logo {
+  margin-left: 0;
+  order: 1;
+  flex-shrink: 0;
+}
+
+/* Menú hamburguesa antes del logo */
+.hamburger-menu {
+  order: 0;
+  flex-shrink: 0;
+}
+
+/* Navegación al final */
+header nav {
+  order: 2;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%; /* Asegura que la navegación ocupe todo el ancho */
+}
+
+/* Responsive: ajusta el gap para pantallas pequeñas */
+@media (max-width: 600px) {
+  header .container {
+    gap: 1.2rem;
+  }
+}
+
+/* Estilo para el logo en el header */
+header .logo {
+    font-family: var(--font-title);
+    font-size: 2rem;
+}
+
+/* Estilo para la lista de navegación en el header */
+header nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.25rem;
+}
+
+/* Estilo para los enlaces de navegación en el header */
+header nav ul li a {
+    color: var(--color-text-light);
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+/* Hero Section */
+/* Sección principal con fondo de color y texto centrado */
+#hero {
+    background-color: var(--color-bg);
+    height: 60vh;
+    min-height: 20rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--color-text-light);
+    width: 100%; /* Asegura que el hero ocupe todo el ancho */
+}
+
+/* Título principal del hero */
+.hero-content h2 {
+    font-family: var(--font-title);
+    font-size: 3rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Párrafo descriptivo en el hero */
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 1.875rem;
+}
+
+/* Botón de llamada a la acción en el hero */
+.cta-button {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    padding: 0.625em 1.25em;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+/* Efecto hover para el botón de llamada a la acción */
+.cta-button:hover {
+    background-color: var(--color-primary-hover);
+}
+
+/* Servicios */
+/* Sección de servicios con padding vertical */
+#servicios {
+    padding: 3.125rem 0;
+    width: 100%; /* Asegura que la sección de servicios ocupe todo el ancho */
+}
+
+/* Título de la sección de servicios */
+#servicios h2 {
+    font-family: var(--font-title);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+/* Grid para mostrar los servicios en columnas responsivas */
+.servicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+    gap: 1.25rem;
+}
+
+/* Tarjeta individual de servicio */
+.servicio {
+    background-color: var(--color-bg-light);
+    padding: 1.25rem;
+    text-align: center;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+/* Título de cada servicio */
+.servicio h3 {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    margin-bottom: 0.625rem;
+}
+
+/* Testimonios */
+/* Sección de testimonios con fondo y color de texto personalizado */
+#testimonios {
+    background-color: var(--color-bg);
+    color: var(--color-text-light);
+    padding: 3.125rem 0;
+    width: 100%; /* Asegura que la sección de testimonios ocupe todo el ancho */
+}
+
+/* Título de la sección de testimonios */
+#testimonios h2 {
+    font-family: var(--font-title);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+/* Grid para mostrar testimonios en columnas responsivas */
+.testimonios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18.75rem, 1fr));
+    gap: 1.25rem;
+}
+
+/* Estilo para las citas de testimonios */
+blockquote {
+    font-style: italic;
+    text-align: center;
+}
+
+/* Estilo para el autor del testimonio */
+cite {
+    display: block;
+    margin-top: 0.625rem;
+    font-weight: bold;
+}
+
+/* Contacto */
+/* Sección de contacto con padding vertical */
+#contacto {
+    padding: 3.125rem 0;
+    width: 100%; /* Asegura que la sección de contacto ocupe todo el ancho */
+}
+
+/* Título de la sección de contacto */
+#contacto h2 {
+    font-family: var(--font-title);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+/* Estilo para el formulario de contacto */
+form {
+    max-width: 37.5rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo para las etiquetas del formulario */
+label {
+    margin-bottom: 0.3125rem;
+    font-weight: bold;
+}
+
+/* Estilo para los campos de entrada y textarea del formulario */
+input, textarea {
+    padding: 0.625rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+/* Centra el botón del formulario */
+button.cta-button {
+    align-self: center;
+}
+
+/* Footer */
+/* Pie de página con fondo y texto centrado */
+footer {
+    background-color: var(--color-bg);
+    color: var(--color-text-light);
+    padding: 1.25rem 0;
+    text-align: center;
+    width: 100%; /* Asegura que el footer ocupe todo el ancho */
+}
+
+/* Lista de enlaces en el footer */
+footer ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin-top: 0.625rem;
+    gap: 0.625rem;
+}
+
+/* Estilo para los enlaces del footer */
+footer ul li a {
+    color: var(--color-text-light);
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+/* Botón hamburguesa */
+/* Menú hamburguesa fijo en la esquina superior izquierda */
+.hamburger-menu {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 2001;
+  cursor: pointer;
+}
+
+/* Líneas del menú hamburguesa */
+.hamburger-menu span {
+  display: block;
+  height: 4px;
+  width: 100%;
+  background: var(--color-primary, #d4af37);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* Menú lateral */
+/* Menú lateral oculto por defecto, aparece al abrir el menú */
+.side-nav {
+  position: fixed;
+  top: 0;
+  left: -220px;
+  width: 200px;
+  height: 100vh;
+  background: rgba(34, 34, 34, 0.97);
+  box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+  z-index: 2000;
+  transition: left 0.3s;
+  padding-top: 17%;
+}
+
+/* Lista de navegación del menú lateral */
+.side-nav ul {
+  list-style: none;
+  padding: 0 20px;
+}
+
+/* Espaciado entre los elementos del menú lateral */
+.side-nav ul li {
+  margin-bottom: 24px;
+}
+
+/* Estilo para los enlaces del menú lateral */
+.side-nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+/* Efecto hover en los enlaces del menú lateral */
+.side-nav ul li a:hover {
+  color: var(--color-primary, #d4af37);
+}
+
+/* Clase para mostrar el menú lateral */
+.side-nav.open {
+  left: 0;
+}
+
+/* Oscurecer fondo al abrir menú */
+/* Crea un overlay oscuro cuando el menú lateral está abierto */
+body.menu-open::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 1500;
+}
+
+/* Responsive Design */
+/* Ajustes para pantallas menores a 900px */
+@media (max-width: 900px) {
+    .hero-content h2 {
+        font-size: 2.2rem;
+    }
+    #servicios h2, #testimonios h2, #contacto h2 {
+        font-size: 2rem;
+    }
+    .servicios-grid, .testimonios-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+  header .logo {
+    margin-left: 60px; /* Deja espacio para el menú hamburguesa */
+  }
+}
+
+/* Ajustes para pantallas menores a 600px */
+@media (max-width: 600px) {
+    header nav ul {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.625rem;
+    }
+    .hero-content h2 {
+        font-size: 1.5rem;
+    }
+    .hero-content p, .cta-button, header nav ul li a {
+        font-size: 1rem;
+    }
+    .servicios-grid, .testimonios-grid {
+        grid-template-columns: 1fr;
+    }
+    .container {
+        padding: 0 0.625rem;
+    }
+    form {
+        max-width: 100%;
+    }
+}
+
+/* ================================
+   CLAMP DE DESCRIPCIÓN EN SERVICIOS
+   Muestra solo una pequeña línea y permite expandir
+   ================================ */
+
+/* Contenedor de cada item de servicio */
+.servicio {
+  position: relative; /* base para futuros badges o acciones */
+}
+
+/* Descripción colapsada por defecto (1–2 líneas) */
+.servicio .service-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;           /* ajusta a 1 o 2 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 3.2em;               /* respaldo para navegadores sin line-clamp */
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+/* Cuando el item está expandido, mostramos todo el texto */
+.servicio.expanded .service-desc {
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
+}
+
+/* Botón “Ver más / Ver menos” */
+.servicio .toggle-desc {
+  display: inline-block;
+  margin-top: 6px;
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  color: inherit;
+  opacity: 0.9;
+}
+
+.servicio .toggle-desc:focus {
+  outline: 2px dashed currentColor; /* accesibilidad */
+  outline-offset: 2px;
+}
+
+/* ================================
+   BUSCADOR DE SERVICIOS
+   ================================ */
+.service-search {
+  margin-bottom: 1rem;
+}
+.service-search__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .5rem;
+}
+.service-search input[type="search"] {
+  width: 100%;
+  padding: .65rem .8rem;
+  border: 1px solid var(--border, #ccc);
+  border-radius: .6rem;
+  background: var(--bg, #111);
+  color: inherit;
+}
+.service-search button {
+  padding: .65rem 1rem;
+  border-radius: .6rem;
+  border: 1px solid transparent;
+  background: var(--accent, #b38bff);
+  color: #111;
+  cursor: pointer;
+}
+.service-search button:focus {
+  outline: 2px dashed currentColor;
+  outline-offset: 2px;
+}
+.service-search__feedback {
+  margin-top: .5rem;
+  font-size: .9rem;
+  opacity: .85;
+}
+
+/* ================================
+   HIGHLIGHT DEL RESULTADO
+   ================================ */
+@keyframes svcHighlight {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.9); background: rgba(255, 235, 130, .25); }
+  60%  { box-shadow: 0 0 0 .5rem rgba(255, 215, 0, 0); background: rgba(255, 235, 130, .15); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); background: transparent; }
+}
+.servicio.highlight {
+  animation: svcHighlight 2.2s ease-out 1;
+  border-radius: .8rem;
+}
+
+/* Asegura visibilidad al expandir el encontrado */
+.servicio.highlight .service-desc {
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
+}
+
+/* ================================
+   BUSCADOR DE SERVICIOS
+   ================================ */
+.service-search { margin-bottom: 1rem; }
+.service-search__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .5rem;
+}
+.service-search input[type="search"] {
+  width: 100%;
+  padding: .65rem .8rem;
+  border: 1px solid var(--border, #ccc);
+  border-radius: .6rem;
+  background: var(--bg, #fff);
+  color: inherit;
+  -webkit-appearance: none; /* iOS: quita estilos raros */
+}
+.service-search button {
+  padding: .65rem 1rem;
+  border-radius: .6rem;
+  border: 1px solid transparent;
+  background: var(--accent, #b38bff);
+  color: #111;
+  cursor: pointer;
+}
+
+/* ================================
+   HIGHLIGHT DEL RESULTADO
+   ================================ */
+@keyframes svcHighlight {
+  0%   { box-shadow: 0 0 0 0 rgba(255,215,0,.9); background: rgba(255,235,130,.25); }
+  60%  { box-shadow: 0 0 0 .5rem rgba(255,215,0,0); background: rgba(255,235,130,.15); }
+  100% { box-shadow: 0 0 0 0 rgba(255,215,0,0); background: transparent; }
+}
+.servicio.highlight {
+  animation: svcHighlight 2.2s ease-out 1;
+  border-radius: .8rem;
+}
+
+/* Colapsado por defecto */
+.servicio .service-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      /* cambia a 1 si querés una línea */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 3.2em;
+  line-height: 1.6;
+  opacity: .95;
+}
+
+/* Expandido */
+.servicio.expanded .service-desc {
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
+}
+
+.servicio .toggle-desc {
+  display: inline-block;
+  margin-top: 6px;
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  color: inherit;
+  opacity: .9;
+}
+
+/* seccion de servicios - magia roja */
+
+.serv-list{list-style:none;padding:0;margin:0;display:grid;gap:16px;}
+
+.serv-card{
+  background:#4b3b5ea1;
+  border:1px 
+  solid #24243a;
+  border-radius:12px;
+  padding:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
+}
+
+.serv-title{margin:8px 0;font-size:1.1rem;}
+.serv-desc{margin:0 0 10px 0;line-height:1.5;}
+.clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.serv-meta{display:flex;gap:10px;font-size:.95rem;margin-bottom:8px;opacity:.9;}
+.serv-price,.serv-duration{padding:2px 8px;border:1px solid #31314a;border-radius:999px;}
+.serv-toggle{background:transparent;border:1px dashed #555;color:#ddd;padding:6px 10px;border-radius:8px;cursor:pointer;}
+.serv-toggle:hover{border-style:solid;}
