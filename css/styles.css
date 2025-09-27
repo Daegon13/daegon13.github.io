@@ -667,3 +667,17 @@ body.menu-open::before {
 .servicio:hover {
   background-color: var(--color-primary-hover);
 }
+
+/* Texto visible dentro de las tarjetas de servicios */
+.servicio h3,
+.servicio p {
+  color: #fff; /* blanco puro para máximo contraste */
+}
+
+/* Alternativa más sutil */
+.servicio h3 {
+  color: var(--color-primary); /* dorado */
+}
+.servicio p {
+  color: #f5f5f5;
+}
