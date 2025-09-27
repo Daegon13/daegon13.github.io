@@ -1,7 +1,7 @@
 /* Variables CSS para colores y fuentes */
 :root {
     --color-bg: #3f3f3f2f;
-    --color-bg-light: #640000;
+    --color-bg-light: #8a0101a8;
     --color-primary: #d4af37;
     --color-primary-hover: #b8952f;
     --color-text: #ffffff;
@@ -636,3 +636,34 @@ body.menu-open::before {
 .serv-price,.serv-duration{padding:2px 8px;border:1px solid #31314a;border-radius:999px;}
 .serv-toggle{background:transparent;border:1px dashed #555;color:#ddd;padding:6px 10px;border-radius:8px;cursor:pointer;}
 .serv-toggle:hover{border-style:solid;}
+
+/* Enlaces de servicios como botones */
+
+/* Enlaces de servicios como botones */
+.servicio-link {
+  text-decoration: none; /* quita subrayado */
+  display: block;        /* que ocupen el espacio del div */
+  border-radius: 10px;   /* bordes redondeados */
+  overflow: hidden;      /* respeta el border-radius */
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.servicio-link:hover {
+  transform: translateY(-6px); /* efecto "botón levantado" */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+
+.servicio-link:active {
+  transform: translateY(-2px); /* feedback al click */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* Ajustamos la tarjeta interna */
+.servicio {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.servicio:hover {
+  background-color: var(--color-primary-hover);
+}
