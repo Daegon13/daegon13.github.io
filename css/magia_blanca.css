@@ -636,3 +636,15 @@ body.menu-open::before {
 .serv-price,.serv-duration{padding:2px 8px;border:1px solid #31314a;border-radius:999px;}
 .serv-toggle{background:transparent;border:1px dashed #555;color:#ddd;padding:6px 10px;border-radius:8px;cursor:pointer;}
 .serv-toggle:hover{border-style:solid;}
+
+/* styles.css */
+.item-desc{
+  white-space: pre-line;   /* convierte \n en saltos visibles */
+  display: block;
+}
+
+.serv-desc{ white-space: pre-wrap; }     /* recortado con clamp respeta \n */
+.serv-desc.is-open{
+  -webkit-line-clamp: initial;
+  overflow: visible;
+}

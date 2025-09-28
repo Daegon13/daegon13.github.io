@@ -274,19 +274,22 @@ async function loadServices() {
       const li = document.createElement("li");
       li.className = "service-item";
       li.dataset.id = s.id;
-      li.innerHTML = `
-        <div class="item-head">
-          <strong>${s.title ?? s.name ?? ""}</strong>
-          <span class="muted">#${s.order ?? 0} · ${s.active ? "Activo" : "Inactivo"}</span>
-        </div>
-        <p class="item-desc">${s.description ?? ""}</p>
-        <div class="item-actions">
-          <button data-act="up"    title="Subir">↑</button>
-          <button data-act="down"  title="Bajar">↓</button>
-          <button data-act="edit">Editar</button>
-          <button data-act="del"   class="danger">Eliminar</button>
-        </div>
-      `;
+li.innerHTML = `
+  <div class="item-head">
+    <strong>${s.title ?? s.name ?? ""}</strong>
+    <span class="muted">#${s.order ?? 0} · ${s.active ? "Activo" : "Inactivo"}</span>
+  </div>
+  <p class="item-desc"></p>
+  <div class="item-actions">
+    <button data-act="up"    title="Subir">↑</button>
+    <button data-act="down"  title="Bajar">↓</button>
+    <button data-act="edit">Editar</button>
+    <button data-act="del"   class="danger">Eliminar</button>
+  </div>
+`;
+
+// 👉 clave: respeta \n
+      li.querySelector(".item-desc").textContent = s.description ?? "";
       li.querySelector('[data-act="edit"]')?.addEventListener("click", () => openEditService(s));
       li.querySelector('[data-act="del"]') ?.addEventListener("click", () => deleteService(s.id));
       li.querySelector('[data-act="up"]')  ?.addEventListener("click", () => reorderSwapWithinCategory(s.id, -1));

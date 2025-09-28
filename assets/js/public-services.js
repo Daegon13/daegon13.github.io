@@ -63,7 +63,7 @@ export async function renderServices(containerSelector = "#lista-servicios", cat
     ul.innerHTML = items.map(s => `
       <li class="serv-card" data-id="${s.id}">
         <h3 class="serv-title">${s.title ?? s.name ?? ""}</h3>
-        <p class="serv-desc clamp-3">${s.description ?? ""}</p>
+        <p class="item-desc"></p>
         <div class="serv-meta">
           ${s.price ? `<span class="serv-price">$${s.price}</span>` : ""}
           ${s.duration ? `<span class="serv-duration">${s.duration} días</span>` : ""}
@@ -71,6 +71,8 @@ export async function renderServices(containerSelector = "#lista-servicios", cat
         <button class="serv-toggle" type="button">Ver más</button>
       </li>
     `).join("");
+    // 👉 clave: respeta \n
+    li.querySelector(".item-desc").textContent = s.description ?? "";
 
     // Toggle "Ver más" / "Ver menos"
     ul.querySelectorAll(".serv-toggle").forEach(btn => {
