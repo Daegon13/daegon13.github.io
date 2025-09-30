@@ -1,0 +1,18 @@
+# Portfolio central
+
+## Scripts
+- `npm run dev` – entorno de desarrollo
+- `npm run build` – build de producción
+- `npm run preview` – vista previa local
+
+## Contenido de proyectos
+Agregar archivos `.mdx` en `src/content/proyectos` con el esquema del frontmatter.
+
+## Deploy
+- GitHub Pages/Netlify/Vercel.
+- Actualizar `site` en `astro.config.mjs`.
+
+Notas de implementación
+•	Accesibilidad: foco visible, contraste AA, alt en imágenes, skip link ya incluido.
+•	SEO técnico: meta description, OG tags por página, sitemap integrado.
+•	Rendimiento: Astro SSG + Tailwind, imágenes optimizadas (idealmente @astrojs/image)

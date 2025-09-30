@@ -1,0 +1,51 @@
+---
+// Home: hero directo + skills + proyectos destacados + CTA
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const proyectos = await getCollection('proyectos');
+const destacados = proyectos.slice(0, 3); // Comentario: ordenar por fecha si querés
+---
+<BaseLayout title="Desarrollador Web Freelance" description="Soluciones rápidas, claras y a medida para tu negocio.">
+  {/* HERO */}
+  <section class="py-16 lg:py-24">
+    <div class="text-center max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">Construyo sitios web rápidos, escalables y adaptados a tu negocio</h1>
+      <p class="mt-4 text-gray-600">Frontend moderno, integraciones simples y SEO técnico sin complicaciones.</p>
+      <div class="mt-6 flex items-center justify-center gap-3">
+        <a href="/proyectos" class="rounded-lg bg-brand px-5 py-2.5 text-white">Ver proyectos</a>
+        <a href="/contacto" class="rounded-lg border px-5 py-2.5 hover:border-brand">Solicitar presupuesto</a>
+      </div>
+    </div>
+  </section>
+
+  {/* SKILLS */}
+  <section class="py-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-xl border p-4"><h3 class="font-semibold">Frontend</h3><p class="text-sm text-gray-600">HTML, CSS, JS, Tailwind, React</p></div>
+      <div class="rounded-xl border p-4"><h3 class="font-semibold">Contenido</h3><p class="text-sm text-gray-600">Astro, MD/MDX, SEO on-page</p></div>
+      <div class="rounded-xl border p-4"><h3 class="font-semibold">Integraciones</h3><p class="text-sm text-gray-600">Firebase, APIs, formularios</p></div>
+      <div class="rounded-xl border p-4"><h3 class="font-semibold">Deploy</h3><p class="text-sm text-gray-600">GitHub Pages, Netlify, Vercel</p></div>
+    </div>
+  </section>
+
+  {/* PROYECTOS DESTACADOS */}
+  <section class="py-12">
+    <h2 class="text-xl font-semibold mb-6">Proyectos recientes</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {destacados.map((p) => (
+        <ProjectCard title={p.data.title} resumen={p.data.resumen} stack={p.data.stack} slug={p.data.slug} cover={p.data.cover} />
+      ))}
+    </div>
+  </section>
+
+  {/* CTA FINAL */}
+  <section class="py-16 text-center">
+    <div class="rounded-2xl border p-8">
+      <h3 class="text-lg font-semibold">¿Listo para empezar?</h3>
+      <p class="text-sm text-gray-600 mt-1">Tengo cupos limitados por mes. Contame tu idea y vemos el mejor camino.</p>
+      <a href="/contacto" class="inline-block mt-4 rounded-lg bg-brand px-5 py-2.5 text-white">Hablemos</a>
+    </div>
+  </section>
+</BaseLayout>

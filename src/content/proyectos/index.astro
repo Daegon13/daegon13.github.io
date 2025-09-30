@@ -1,0 +1,17 @@
+---
+// Página de portafolio con filtros simples por sector/stack si más adelante querés
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+const proyectos = await getCollection('proyectos');
+---
+<BaseLayout title="Proyectos" description="Casos reales con soluciones concretas.">
+  <section class="py-12">
+    <h1 class="text-2xl font-bold mb-6">Proyectos</h1>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {proyectos.map((p) => (
+        <ProjectCard title={p.data.title} resumen={p.data.resumen} stack={p.data.stack} slug={p.data.slug} cover={p.data.cover} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
