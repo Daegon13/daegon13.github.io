@@ -1,0 +1,66 @@
+{
+  "$ref": "#/definitions/proyectos",
+  "definitions": {
+    "proyectos": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "sector": {
+          "type": "string"
+        },
+        "rol": {
+          "type": "string"
+        },
+        "stack": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fecha": {
+          "type": "string"
+        },
+        "resumen": {
+          "type": "string"
+        },
+        "problema": {
+          "type": "string"
+        },
+        "solucion": {
+          "type": "string"
+        },
+        "resultado": {
+          "type": "string"
+        },
+        "repoUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "demoUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "cover": {
+          "type": "string"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "sector",
+        "rol",
+        "stack",
+        "fecha",
+        "resumen",
+        "problema",
+        "solucion"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

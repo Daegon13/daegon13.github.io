@@ -15,3 +15,11 @@ const proyectos = await getCollection('proyectos');
     </div>
   </section>
 </BaseLayout>
+
+<ProjectCard
+  title={p.data.title}
+  resumen={p.data.resumen}
+  stack={p.data.stack}
+  slug={p.slug}
+  cover={p.data.cover}
+/>

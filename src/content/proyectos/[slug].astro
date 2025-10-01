@@ -39,3 +39,11 @@ const { title, resumen, stack, sector, rol, fecha, problema, solucion, resultado
     </div>
   </article>
 </BaseLayout>
+
+export async function getStaticPaths() {
+  const posts = await getCollection('proyectos');
+  return posts.map((p) => ({
+    params: { slug: p.slug },
+    props: { proyecto: p }
+  }));
+}
