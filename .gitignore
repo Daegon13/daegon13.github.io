@@ -1,0 +1,19 @@
+# Dependencias
+node_modules/
+
+# Carpetas de compilación / build
+dist/
+.out/
+.build/
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Entornos
+.env
+.env.local
