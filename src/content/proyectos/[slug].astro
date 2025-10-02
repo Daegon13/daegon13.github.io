@@ -1,32 +1,67 @@
- <!-- Página dinámica: renderiza el contenido MDX según slug -->
 ---
-
-import BaseLayout from '../src/layouts/BaseLayout.astro';
+// Página de detalle para cada proyecto
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-
-export async function getStaticPaths() {
-  const posts = await getCollection('proyectos');
-  return posts.map((p) => ({ params: { slug: p.slug }, props: { proyecto: p } }));
-}
-
-const { proyecto } = Astro.props;
-const { title, resumen, stack, sector, rol, fecha, problema, solucion, resultado, repoUrl, demoUrl, cover } = proyecto.data;
-const { Content } = await proyecto.render();   // 👈 necesario para poder usar <Content />
----
-<BaseLayout title={title} description={resumen} image={cover}>
-  <article class="py-12 prose prose-slate max-w-none">
-    ...
-    <div class="mt-8">
-      <Content />  <!-- ahora sí existe -->
-    </div>
-  </article>
-</BaseLayout>
 
 export async function getStaticPaths() {
   const posts = await getCollection('proyectos');
   return posts.map((p) => ({
     params: { slug: p.slug },
-    props: { proyecto: p }
+    props: { proyecto: p },
   }));
 }
 
+const { proyecto } = Astro.props;
+// Desestructurar campos del frontmatter del MDX
+const {
+  title,
+  resumen,
+  stack = [],
+  sector,
+  rol,
+  fecha,
+  problema,
+  solucion,
+  resultado,
+  repoUrl,
+  demoUrl,
+  cover = '/og-default.png',
+} = proyecto.data;
+// Obtener el componente Content para renderizar el cuerpo MDX
+const { Content } = await proyecto.render();
+---
+<BaseLayout title={title} description={resumen} image={cover} url={`/proyectos/${proyecto.slug}`}>
+  <article class="py-12 prose prose-slate max-w-none">
+    <!-- Encabezado del proyecto -->
+    <header class="not-prose mb-6">
+      <h1 class="text-3xl font-bold mb-2">{title}</h1>
+      {resumen && <p class="text-gray-600">{resumen}</p>}
+      <div class="mt-2 text-sm text-gray-500">
+        {sector}{sector && ' · '}{rol}{(sector || rol) && ' · '}{fecha}
+      </div>
+      {Array.isArray(stack) && stack.length > 0 && (
+        <div class="mt-3 flex flex-wrap gap-2">
+          {stack.map((s) => <span class="rounded bg-gray-100 px-2 py-0.5 text-xs">{s}</span>)}
+        </div>
+      )}
+      <div class="mt-4 flex gap-3">
+        {demoUrl && <a href={demoUrl} class="rounded border px-3 py-1.5 hover:border-brand">Demo</a>}
+        {repoUrl && <a href={repoUrl} class="rounded border px-3 py-1.5 hover:border-brand">Repositorio</a>}
+      </div>
+    </header>
+
+    <!-- Sección de contexto: problema, solución y resultados -->
+    {(problema || solucion || resultado) && (
+      <section class="not-prose mt-8">
+        {problema && <p><strong>Problema:</strong> {problema}</p>}
+        {solucion && <p><strong>Solución:</strong> {solucion}</p>}
+        {resultado && <p><strong>Resultado:</strong> {resultado}</p>}
+      </section>
+    )}
+
+    <!-- Render del cuerpo MDX adicional del proyecto -->
+    <div class="mt-8">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
