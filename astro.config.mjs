@@ -8,7 +8,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://tu-dominio.com', // TODO: reemplazar cuando tengas dominio
+  site: 'https://daegon13.github.io', // TODO: reemplazar cuando tengas dominio
   integrations: [tailwind(), mdx(), sitemap()],
   markdown: {
     shikiConfig: { theme: 'github-dark' } // resaltado de código legible
