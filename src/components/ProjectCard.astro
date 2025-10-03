@@ -1,7 +1,7 @@
 ---
 // Tarjeta de proyecto reutilizable
 // Props: title, resumen, stack (string[]), slug, cover
-import Badge from './Badge.astro';
+import Badge from './badge.astro';
 const { title, resumen, stack = [], slug, cover = '/og-default.png' } = Astro.props;
 ---
 <a href={`/proyectos/${slug}`} class="group block overflow-hidden rounded-xl border shadow-soft hover:shadow-lg transition">

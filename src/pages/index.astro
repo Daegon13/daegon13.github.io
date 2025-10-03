@@ -1,7 +1,7 @@
 ---
 // Home: hero directo + skills + proyectos destacados + CTA
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import BaseLayout from '../layouts/baselayout.astro';
+import ProjectCard from '../components/projectcard.astro';
 import { getCollection } from 'astro:content';
 
 // Cargar la colección de proyectos y ordenarlos por fecha descendente
@@ -46,15 +46,19 @@ const destacados = proyectos.slice(0, 3);
   <section class="py-12">
     <h2 class="text-xl font-semibold mb-6">Proyectos recientes</h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {destacados.map((p) => (
-        <ProjectCard
-          title={p.data.title}
-          resumen={p.data.resumen}
-          stack={p.data.stack}
-          slug={p.slug}        {/* utilizar slug automático */}
-          cover={p.data.cover}
-        />
-      ))}
+      {
+        destacados.map((p) => {
+          return (
+            <ProjectCard
+              title={p.data.title}
+              resumen={p.data.resumen}
+              stack={p.data.stack}
+              slug={p.slug}
+              cover={p.data.cover}
+            />
+          );
+        })
+      }
     </div>
   </section>
 
