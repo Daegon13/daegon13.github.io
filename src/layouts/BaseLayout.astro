@@ -1,33 +1,31 @@
 ---
-// Layout global: cabecera, meta SEO y estructura común
 import Nav from '../components/nav.astro';
-import Footer from '../components/footer.astro';
-// Desestructurar props con valores por defecto
+import Footer from '../components/Footer.astro';
 const { title, description, image = '/og-default.png', url = '' } = Astro.props;
 ---
+
 <html lang="es" class="scroll-smooth">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+
     <!-- Open Graph / Twitter para vista previa en redes -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
     <meta property="og:url" content={url} />
+
     <link rel="icon" href="/favicon.svg" />
   </head>
   <body class="min-h-screen bg-white text-gray-900 antialiased">
     <a href="#contenido" class="sr-only focus:not-sr-only">Saltar al contenido</a>
-    <!-- Navegación principal -->
     <Nav />
-    <!-- Contenido principal -->
     <main id="contenido" class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <slot />
     </main>
-    <!-- Pie de página con datos de contacto -->
     <Footer />
   </body>
 </html>
