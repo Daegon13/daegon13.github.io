@@ -1,8 +1,13 @@
 ---
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+
+/* 1) Importar el CSS global de Tailwind para que Astro lo empaquete */
+import '../styles/tailwind.css';
+
 const { title, description, image = '/og-default.png', url = '' } = Astro.props;
 ---
+
 
 <html lang="es" class="scroll-smooth">
   <head>

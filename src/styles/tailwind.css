@@ -1,0 +1,9 @@
+/* src/styles/tailwind.css */
+/* ------------------------ */
+/* 1) Directivas de Tailwind: generan el CSS final */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2) Aquí puedes extender utilidades globales (opcional) */
+/* Ej.: .container custom, tipografías, etc. */
