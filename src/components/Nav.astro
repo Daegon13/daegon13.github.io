@@ -77,11 +77,12 @@ const current = Astro.url.pathname;
 
   <!-- Panel móvil: h-dvh para cubrir alto real; safe-area padding para no chocar barra del sistema -->
   <aside
-    id="mobile-menu"
-    class="md:hidden fixed top-0 right-0 z-50 h-dvh w-11/12 max-w-xs translate-x-full bg-white dark:bg-[#0b1220] border-l border-gray-200/70 dark:border-gray-700/70 shadow-xl transition-transform duration-200"
-    tabindex="-1"
-    aria-hidden="true"
-  >
+  id="mobile-menu"
+  class="md:hidden fixed top-0 right-0 z-50 h-dvh w-[min(20rem,92vw)] translate-x-full bg-white dark:bg-[#0b1220] border-l border-gray-200/70 dark:border-gray-700/70 shadow-xl transition-transform duration-200"
+  tabindex="-1"
+  aria-hidden="true"
+>
+
     <!-- Header del panel -->
     <div class="h-14 px-4 flex items-center justify-between border-b border-gray-200/70 dark:border-gray-700/70 pt-[env(safe-area-inset-top)]">
       <span class="font-semibold">Menú</span>
@@ -120,62 +121,81 @@ const current = Astro.url.pathname;
 
   <!-- Lógica de apertura/cierre y focus -->
   <script>
-    // Elementos
-    const $toggle = document.getElementById('nav-toggle');
-    const $iconOpen = document.getElementById('icon-open');
-    const $iconClose = document.getElementById('icon-close');
-    const $menu = document.getElementById('mobile-menu');
-    const $overlay = document.getElementById('mobile-overlay');
-    const $close = document.getElementById('nav-close');
-    const html = document.documentElement;
+  const $toggle = document.getElementById('nav-toggle');
+  const $iconOpen = document.getElementById('icon-open');
+  const $iconClose = document.getElementById('icon-close');
+  const $menu = document.getElementById('mobile-menu');
+  const $overlay = document.getElementById('mobile-overlay');
+  const $close = document.getElementById('nav-close');
 
-    // Helpers de estado
-    const setState = (open) => {
-      // Panel deslizante
-      $menu?.classList.toggle('translate-x-full', !open);
-      $menu?.setAttribute('aria-hidden', String(!open));
+  let scrollY = 0;
 
-      // Overlay activo (sin hidden: usamos opacidad + pointer-events)
-      $overlay?.classList.toggle('opacity-0', !open);
-      $overlay?.classList.toggle('pointer-events-none', !open);
+  const lockBody = () => {
+    // Guardamos la posición vertical actual
+    scrollY = window.scrollY || window.pageYOffset || 0;
+    // Fijamos el body: esto evita que el viewport “se corra” al abrir el panel
+    const b = document.body.style;
+    b.position = 'fixed';
+    b.top = `-${scrollY}px`;
+    b.left = '0';
+    b.right = '0';
+    b.width = '100%';
+    b.overflow = 'hidden';
+  };
 
-      // Scroll lock del documento
-      html.classList.toggle('overflow-hidden', open);
+  const unlockBody = () => {
+    const b = document.body.style;
+    b.position = '';
+    b.top = '';
+    b.left = '';
+    b.right = '';
+    b.width = '';
+    b.overflow = '';
+    // Restauramos la posición exacta anterior
+    window.scrollTo(0, scrollY);
+  };
 
-      // Botón hamburguesa/X
-      $toggle?.setAttribute('aria-expanded', String(open));
-      $toggle?.setAttribute('data-open', String(open));
-      $iconOpen?.classList.toggle('hidden', open);
-      $iconClose?.classList.toggle('hidden', !open);
+  const setState = (open) => {
+    // Panel
+    $menu?.classList.toggle('translate-x-full', !open);
+    $menu?.setAttribute('aria-hidden', String(!open));
 
-      // Enfoque accesible
-      if (open) {
-        const firstLink = $menu?.querySelector('a');
-        firstLink && firstLink.focus();
-      } else {
-        $toggle?.focus();
-      }
-    };
+    // Overlay
+    $overlay?.classList.toggle('opacity-0', !open);
+    $overlay?.classList.toggle('pointer-events-none', !open);
 
-    const open = () => setState(true);
-    const close = () => setState(false);
+    // Botón / iconos
+    $toggle?.setAttribute('aria-expanded', String(open));
+    $toggle?.setAttribute('data-open', String(open));
+    $iconOpen?.classList.toggle('hidden', open);
+    $iconClose?.classList.toggle('hidden', !open);
 
-    // Eventos
-    $toggle?.addEventListener('click', () => {
-      const isOpen = $toggle?.getAttribute('data-open') === 'true';
-      isOpen ? close() : open();
-    });
+    // Lock/unlock body
+    if (open) lockBody(); else unlockBody();
 
-    $close?.addEventListener('click', close);
-    $overlay?.addEventListener('click', close);
+    // Enfoque accesible sin desplazar el viewport
+    if (open) {
+      const firstLink = $menu?.querySelector('a');
+      firstLink && firstLink.focus({ preventScroll: true });
+    } else {
+      $toggle?.focus({ preventScroll: true });
+    }
+  };
 
-    // Escape cierra
-    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  const open = () => setState(true);
+  const close = () => setState(false);
 
-    // Cierra al navegar en el panel
-    $menu?.addEventListener('click', (e) => {
-      const t = e.target;
-      if (t && t.tagName === 'A') close();
-    });
-  </script>
+  $toggle?.addEventListener('click', () => {
+    const isOpen = $toggle?.getAttribute('data-open') === 'true';
+    isOpen ? close() : open();
+  });
+  $close?.addEventListener('click', close);
+  $overlay?.addEventListener('click', close);
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  $menu?.addEventListener('click', (e) => {
+    const t = e.target;
+    if (t && t.tagName === 'A') close();
+  });
+</script>
+
 </nav>
