@@ -1,28 +1,36 @@
 ---
-// Barra de navegación accesible y mínima (VERSIÓN COMPATIBLE)
-// - Suma aria-current al link activo usando Astro.url.pathname
-// - Mantiene clases y estructura actual
+/* NAVBAR RESPONSIVE COMPATIBLE
+   - Desktop: igual a tu barra actual, horizontal.
+   - Mobile: botón hamburguesa -> panel deslizante.
+   - Accesibilidad: aria-expanded, aria-controls, aria-current, cierre con Escape.
+   - Estilos: conserva look minimal y usa tus clases neutrales.
+*/
 const links = [
   { href: '/', label: 'Inicio' },
   { href: '/proyectos', label: 'Proyectos' },
   { href: '/servicios', label: 'Servicios' },
+  // enlace directo a la sección de planes en home
+  { href: '/#planes', label: 'Planes' },
   { href: '/sobre-mi', label: 'Sobre mí' },
   { href: '/contacto', label: 'Contacto' }
 ];
 
 const current = Astro.url.pathname;
 ---
-<nav class="sticky top-0 z-40 w-full bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 border-b">
+<nav class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-[#0b1220]/80 dark:supports-[backdrop-filter]:bg-[#0b1220]/60">
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+    <!-- Marca -->
     <a href="/" class="font-semibold">Marin.dev</a>
-    <ul class="flex gap-4 text-sm">
+
+    <!-- Desktop nav -->
+    <ul class="hidden md:flex items-center gap-5 text-sm">
       {links.map((l) => {
         const isActive = current === l.href || (l.href !== '/' && current.startsWith(l.href));
         return (
           <li>
             <a
               href={l.href}
-              class={`hover:text-brand ${isActive ? 'text-brand font-medium' : ''}`}
+              class={`hover:text-brand transition ${isActive ? 'text-brand font-medium' : 'text-gray-700 dark:text-gray-300'}`}
               aria-current={isActive ? 'page' : undefined}
             >
               {l.label}
@@ -31,8 +39,108 @@ const current = Astro.url.pathname;
         );
       })}
     </ul>
-        <a href="/contacto" class="hidden sm:inline-block text-sm font-medium hover:text-brand">Presupuesto</a>
 
+    <!-- CTA discreto a Contacto en desktop -->
+    <div class="hidden md:block">
+      <a href="/contacto" class="text-sm font-medium hover:text-brand">Presupuesto</a>
+    </div>
+
+    <!-- Botón hamburguesa (mobile) -->
+    <button
+      id="nav-toggle"
+      class="md:hidden inline-flex items-center justify-center rounded-lg p-2 border border-gray-300/70 dark:border-gray-700/70"
+      aria-label="Abrir menú"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+    >
+      <!-- Ícono simple (tres barras) -->
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-gray-700 dark:text-gray-200">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
   </div>
-</nav>
 
+  <!-- Overlay + panel móvil -->
+  <div id="mobile-overlay" class="md:hidden fixed inset-0 z-40 hidden bg-black/40"></div>
+
+  <div
+    id="mobile-menu"
+    class="md:hidden fixed top-0 right-0 z-50 h-full w-11/12 max-w-xs translate-x-full bg-white dark:bg-[#0b1220] border-l border-gray-200/70 dark:border-gray-700/70 shadow-xl transition-transform"
+    tabindex="-1"
+  >
+    <!-- Header del panel -->
+    <div class="h-14 px-4 flex items-center justify-between border-b border-gray-200/70 dark:border-gray-700/70">
+      <span class="font-semibold">Menú</span>
+      <button id="nav-close" class="inline-flex items-center justify-center rounded-lg p-2" aria-label="Cerrar menú">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-gray-700 dark:text-gray-200">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Links -->
+    <ul class="p-4 space-y-2">
+      {links.map((l) => {
+        const isActive = current === l.href || (l.href !== '/' && current.startsWith(l.href));
+        return (
+          <li>
+            <a
+              href={l.href}
+              class={`block rounded-lg px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-white/10 ${isActive ? 'text-brand font-medium' : 'text-gray-800 dark:text-gray-200'}`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {l.label}
+            </a>
+          </li>
+        );
+      })}
+      <li class="pt-2">
+        <a href="/contacto" class="block rounded-lg px-3 py-2 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white text-center">
+          Pedir estimación
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Script mínimo para togglear -->
+  <script>
+    const $toggle = document.getElementById('nav-toggle');
+    const $close = document.getElementById('nav-close');
+    const $menu = document.getElementById('mobile-menu');
+    const $overlay = document.getElementById('mobile-overlay');
+    const html = document.documentElement;
+
+    const open = () => {
+      $menu?.classList.remove('translate-x-full');
+      $overlay?.classList.remove('hidden');
+      html.classList.add('overflow-hidden');
+      $toggle?.setAttribute('aria-expanded', 'true');
+      // foco al primer link
+      const firstLink = $menu?.querySelector('a');
+      firstLink && firstLink.focus();
+    };
+
+    const close = () => {
+      $menu?.classList.add('translate-x-full');
+      $overlay?.classList.add('hidden');
+      html.classList.remove('overflow-hidden');
+      $toggle?.setAttribute('aria-expanded', 'false');
+      $toggle?.focus();
+    };
+
+    $toggle?.addEventListener('click', open);
+    $close?.addEventListener('click', close);
+    $overlay?.addEventListener('click', close);
+
+    // Escape para cerrar
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+
+    // Cierra al navegar
+    $menu?.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target && target.tagName === 'A') close();
+    });
+  </script>
+</nav>
