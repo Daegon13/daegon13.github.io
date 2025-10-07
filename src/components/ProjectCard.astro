@@ -1,15 +1,31 @@
 ---
-// Tarjeta de proyecto reutilizable
-// Props: title, resumen, stack (string[]), slug, cover
+/* Tarjeta de proyecto reutilizable (VERSIÓN COMPATIBLE)
+   - Mantiene props y estructura actuales: title, resumen, stack (string[]), slug, cover
+   - Sólo suma mejoras no invasivas: lazy-loading y decoding async en la imagen
+*/
 import Badge from './Badge.astro';
 const STACK_LIMIT = 4;
 const { title, resumen, stack = [], slug, cover = '/og-default.png' } = Astro.props;
 ---
-<a href={`/proyectos/${slug}`} class="group block overflow-hidden rounded-xl border shadow-soft hover:shadow-lg transition">
-  <img src={cover} alt={`Portada de ${title}`} class="aspect-video w-full object-cover" />
+<a
+  href={`/proyectos/${slug}`}
+  class="group block overflow-hidden rounded-xl border shadow-soft hover:shadow-lg transition"
+>
+  <!-- Imagen de portada: misma clase/aspecto; sumamos lazy + decoding -->
+  <img
+    src={cover}
+    alt={`Portada de ${title}`}
+    class="aspect-video w-full object-cover"
+    loading="lazy"
+    decoding="async"
+  />
+
+  <!-- Contenido textual: se mantiene igual -->
   <div class="p-4">
     <h3 class="text-base font-semibold group-hover:text-brand">{title}</h3>
     <p class="mt-1 text-sm text-gray-600">{resumen}</p>
+
+    <!-- Badges de stack (limitados para no romper el layout) -->
     <div class="mt-3 flex flex-wrap gap-2">
       {stack.slice(0, STACK_LIMIT).map((s: string) => <Badge label={s} />)}
     </div>
