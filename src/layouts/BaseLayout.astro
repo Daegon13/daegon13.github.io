@@ -23,6 +23,35 @@ const { title, description, image = '/og-default.png', url = '' } = Astro.props;
     <meta property="og:image" content={image} />
     <meta property="og:url" content={url} />
 
+        <!-- JSON-LD: Organization + WebSite -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "name": "Marin.dev",
+            "url": "https://daegon13.github.io/",
+            "logo": "https://daegon13.github.io/og-default.png",
+            "sameAs": [
+              "https://github.com/Daegon13"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "url": "https://daegon13.github.io/",
+            "name": "Portafolio de Desarrollo Web",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://daegon13.github.io/buscar?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          }
+        ]
+      }
+    </script>
+
+
     <!-- Canonical (solo si llega url por props) -->
     {url && <link rel="canonical" href={url} />}
 

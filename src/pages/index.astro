@@ -10,15 +10,29 @@ proyectos = proyectos.sort((a, b) => (a.data.fecha < b.data.fecha ? 1 : -1));
 const destacados = proyectos.slice(0, 3);
 ---
 <BaseLayout title="Desarrollador Web Freelance" description="Soluciones rápidas, claras y a medida para tu negocio.">
-  <!-- HERO: Presentación principal -->
-  <section class="py-16 lg:py-24 text-center max-w-3xl mx-auto">
-    <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">Construyo sitios web rápidos, escalables y adaptados a tu negocio</h1>
-    <p class="mt-4 text-gray-600">Frontend moderno, integraciones simples y SEO técnico sin complicaciones.</p>
-    <div class="mt-6 flex items-center justify-center gap-3">
-      <a href="/proyectos" class="rounded-lg bg-brand px-5 py-2.5 text-white">Ver proyectos</a>
-      <a href="/contacto" class="rounded-lg border px-5 py-2.5 hover:border-brand">Solicitar presupuesto</a>
-    </div>
-  </section>
+<section class="py-20 md:py-28 text-center">
+  <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+    Desarrollo de sitios web rápidos, escalables y adaptados a tu negocio
+  </h1>
+  <p class="mt-4 text-base md:text-lg text-gray-400">
+    Frontend moderno, integraciones simples y SEO técnico sin complicaciones.
+  </p>
+
+  <!-- CTAs -->
+  <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+    <a href="/contacto" class="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white transition">
+      Pedir estimación en 24h
+    </a>
+    <a href="/proyectos" class="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium border border-gray-300/70 dark:border-gray-700/70 hover:opacity-90 transition">
+      Ver proyectos
+    </a>
+  </div>
+
+  <!-- Prueba social simple: no requiere íconos -->
+  <p class="mt-6 text-sm text-gray-500">
+    +3 sitios lanzados • cargas sub-1s • respuesta en 24h
+  </p>
+</section>
 
   <!-- SKILLS: destrezas principales -->
   <section class="py-8">

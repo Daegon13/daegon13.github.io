@@ -1,25 +1,94 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+/* Página de Contacto (sin backend)
+   - Envía por mailto a damgmarin13@gmail.com armando el asunto y el cuerpo
+   - Validación mínima con atributos HTML
+   - No depende de librerías, no toca tailwind.config
+*/
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Contacto – Marin.dev";
+const description = "Contame tu proyecto y recibí una estimación en 24 horas.";
+const url = "https://daegon13.github.io/contacto";
+const image = "/og-default.png";
 ---
-<BaseLayout title="Contacto" description="Hablemos de tu proyecto.">
-  <section class="py-12 max-w-2xl mx-auto">
-    <h1 class="text-2xl font-bold mb-6">Contacto</h1>
-    <form action="https://formspree.io/f/TU_ID" method="POST" class="space-y-4">
+<BaseLayout {title} {description} {url} {image}>
+  <section class="py-12 md:py-16">
+    <h1 class="text-2xl md:text-3xl font-semibold">Contacto</h1>
+    <p class="mt-2 text-gray-500">Completá el formulario y te respondo en menos de 24 horas.</p>
+
+    <form id="contacto" class="mt-8 max-w-xl space-y-4">
+      <!-- Nombre -->
       <div>
-        <label class="block text-sm font-medium">Nombre</label>
-        <input name="nombre" required class="mt-1 w-full rounded border px-3 py-2" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium">Email</label>
-        <input type="email" name="email" required class="mt-1 w-full rounded border px-3 py-2" />
+        <label for="nombre" class="block text-sm font-medium">Nombre:</label>
+        <input id="nombre" name="nombre" type="text" required
+               class="mt-1 w-full rounded-lg border border-gray-300/70 dark:border-gray-700/70 bg-transparent px-3 py-2" />
       </div>
 
+      <!-- Email -->
       <div>
-        <label class="block text-sm font-medium">Mensaje</label>
-        <textarea name="mensaje" rows="4" class="mt-1 w-full rounded border px-3 py-2"></textarea>
+        <label for="email" class="block text-sm font-medium">Email:</label>
+        <input id="email" name="email" type="email" required
+               class="mt-1 w-full rounded-lg border border-gray-300/70 dark:border-gray-700/70 bg-transparent px-3 py-2" />
       </div>
-      <button class="rounded bg-brand px-5 py-2.5 text-white">Enviar</button>
+
+      <!-- Presupuesto estimado -->
+      <div>
+        <label for="presupuesto" class="block text-sm font-medium">Presupuesto estimado - (USD):</label>
+        <input id="presupuesto" name="presupuesto" type="number" min="0" step="50"
+               class="mt-1 w-full rounded-lg border border-gray-300/70 dark:border-gray-700/70 bg-transparent px-3 py-2" />
+      </div>
+
+      <!-- Plazo estimado -->
+      <div>
+        <label for="plazo" class="block text-sm font-medium">Plazo requerido(si aplica) - (días):</label>
+        <input id="plazo" name="plazo" type="number" min="1" step="1" 
+               class="mt-1 w-full rounded-lg border border-gray-300/70 dark:border-gray-700/70 bg-transparent px-3 py-2" />
+      </div>
+
+      <!-- Mensaje -->
+      <div>
+        <label for="mensaje" class="block text-sm font-medium">Resumen de tu negocio:</label>
+        <textarea id="mensaje" name="mensaje" rows="5" required
+                  class="mt-1 w-full rounded-lg border border-gray-300/70 dark:border-gray-700/70 bg-transparent px-3 py-2"></textarea>
+      </div>
+
+      <!-- Acción -->
+      <div class="pt-2">
+        <button type="submit"
+                class="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white transition">
+          Recibir propuesta
+        </button>
+      </div>
+
+      <!-- Fallback si JS está deshabilitado -->
+      <noscript>
+        <p class="mt-3 text-sm text-gray-500">
+          Si tu navegador no permite enviar el formulario, escribime a
+          <a class="underline" href="mailto:damgmarin13@gmail.com">damgmarin13@gmail.com</a>.
+        </p>
+      </noscript>
     </form>
   </section>
-</BaseLayout>
 
+  <!-- Script mínimo: arma un mailto con los datos -->
+  <script>
+    const form = document.getElementById('contacto') as HTMLFormElement | null;
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!form) return;
+      const data = new FormData(form);
+      const nombre = encodeURIComponent(String(data.get('nombre') || ''));
+      const email = encodeURIComponent(String(data.get('email') || ''));
+      const presupuesto = encodeURIComponent(String(data.get('presupuesto') || ''));
+      const plazo = encodeURIComponent(String(data.get('plazo') || ''));
+      const mensaje = encodeURIComponent(String(data.get('mensaje') || ''));
+
+      const subject = encodeURIComponent(`Nueva consulta – ${nombre}`);
+      const body = encodeURIComponent(
+        `Nombre: ${nombre}\nEmail: ${email}\nPresupuesto: USD ${presupuesto}\nPlazo: ${plazo} días\n\nMensaje:\n${mensaje}`
+      );
+
+      window.location.href = `mailto:damgmarin13@gmail.com?subject=${subject}&body=${body}`;
+    });
+  </script>
+</BaseLayout>
