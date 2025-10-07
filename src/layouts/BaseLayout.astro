@@ -86,6 +86,48 @@ const { title, description, image = '/og-default.png', url = '' } = Astro.props;
       }
     </script>
 
+        <!-- JSON-LD: FAQPage (mejora rich results) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Cuánto tardan los proyectos?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Depende del alcance. Una Landing Express demora 3–5 días hábiles; una Web Corporativa, 7–12 días; un panel con integraciones, 10–20 días. Te paso cronograma y entregables por escrito antes de empezar."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cómo se paga?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "50% al iniciar y 50% al entregar. Acepto transferencia y PayPal. Para proyectos mayores, podemos dividir en hitos (por ejemplo 30/40/30). Facturación disponible."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Incluye mantenimiento?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sí, entrego una semana de soporte post-lanzamiento para ajustes menores. Si necesitás mantenimiento continuo, podemos fijar un plan mensual (actualizaciones, mejoras, seguridad)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿El código y los archivos son míos?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sí. El proyecto se entrega con repositorio y despliegue configurado (GitHub Pages / Netlify / Vercel). Te doy acceso y documentación breve para que puedas continuar sin fricción."
+            }
+          }
+        ]
+      }
+    </script>
+
 
     <!-- Canonical (solo si llega url por props) -->
     {url && <link rel="canonical" href={url} />}

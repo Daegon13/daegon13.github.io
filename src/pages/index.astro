@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PricingPlans from "../components/PricingPlans.astro";
 import { getCollection } from 'astro:content';
+import FAQs from "../components/FAQs.astro";
 
 // Cargar la colección de proyectos y ordenarlos por fecha descendente
 let proyectos = await getCollection('proyectos');
@@ -16,7 +17,7 @@ const destacados = proyectos.slice(0, 3);
     Desarrollo de sitios web rápidos, escalables y adaptados a tu negocio
   </h1>
   <p class="mt-4 text-base md:text-lg text-gray-400">
-    Frontend moderno, integraciones simples y SEO técnico sin complicaciones.
+    Frontend moderno, integraciones simples y SEO técnico eficiente.
   </p>
 
   <!-- CTAs -->
@@ -81,6 +82,8 @@ const destacados = proyectos.slice(0, 3);
   <section id="planes" class="scroll-mt-24">
     <PricingPlans />
   </section>
+
+  <FAQs />
 
   <!-- CTA FINAL: invita al contacto -->
   <section class="py-16 text-center">

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PricingPlans from "../components/PricingPlans.astro";
+import FAQs from "../components/FAQs.astro";
 
 const title = "Servicios – Marin.dev";
 const description = "Paquetes claros, entregables definidos y tiempos de entrega reales.";
@@ -8,5 +9,10 @@ const url = "https://daegon13.github.io/servicios";
 const image = "/og-default.png";
 ---
 <BaseLayout {title} {description} {url} {image}>
-  <PricingPlans />
+  <section id="planes" class="scroll-mt-24">
+    <PricingPlans />
+  </section>
+
+  <!-- FAQs debajo de los planes -->
+  <FAQs />
 </BaseLayout>

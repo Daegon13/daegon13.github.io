@@ -1,15 +1,16 @@
 ---
-/* NAVBAR RESPONSIVE COMPATIBLE
-   - Desktop: igual a tu barra actual, horizontal.
-   - Mobile: botón hamburguesa -> panel deslizante.
-   - Accesibilidad: aria-expanded, aria-controls, aria-current, cierre con Escape.
-   - Estilos: conserva look minimal y usa tus clases neutrales.
+/* NAVBAR RESPONSIVE—FIXES MOVIL
+   Cambios clave:
+   1) Overlay full viewport con opacidad transicionada (nada de hidden que rompe stacking).
+   2) Panel usa h-dvh (altura dinámica móvil) + safe-area top/bottom.
+   3) Bloqueo de scroll del documento cuando el menú está abierto.
+   4) Sincronización de estados: aria-expanded, mostrar/ocultar hamburguesa según estado.
+   5) Colores explícitos en los links para buen contraste en dark y light.
 */
 const links = [
   { href: '/', label: 'Inicio' },
   { href: '/proyectos', label: 'Proyectos' },
   { href: '/servicios', label: 'Servicios' },
-  // enlace directo a la sección de planes en home
   { href: '/#planes', label: 'Planes' },
   { href: '/sobre-mi', label: 'Sobre mí' },
   { href: '/contacto', label: 'Contacto' }
@@ -30,7 +31,9 @@ const current = Astro.url.pathname;
           <li>
             <a
               href={l.href}
-              class={`hover:text-brand transition ${isActive ? 'text-brand font-medium' : 'text-gray-700 dark:text-gray-300'}`}
+              class={`hover:text-brand transition ${
+                isActive ? 'text-brand font-medium' : 'text-gray-800 dark:text-gray-200'
+              }`}
               aria-current={isActive ? 'page' : undefined}
             >
               {l.label}
@@ -40,53 +43,66 @@ const current = Astro.url.pathname;
       })}
     </ul>
 
-    <!-- CTA discreto a Contacto en desktop -->
+    <!-- CTA discreto en desktop -->
     <div class="hidden md:block">
       <a href="/contacto" class="text-sm font-medium hover:text-brand">Presupuesto</a>
     </div>
 
-    <!-- Botón hamburguesa (mobile) -->
+    <!-- Botón hamburguesa (solo móvil) -->
     <button
       id="nav-toggle"
       class="md:hidden inline-flex items-center justify-center rounded-lg p-2 border border-gray-300/70 dark:border-gray-700/70"
       aria-label="Abrir menú"
       aria-controls="mobile-menu"
       aria-expanded="false"
+      data-open="false"
     >
-      <!-- Ícono simple (tres barras) -->
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-gray-700 dark:text-gray-200">
+      <!-- Ícono hamburguesa -->
+      <svg id="icon-open" width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-gray-800 dark:text-gray-200">
         <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <!-- Ícono cerrar (se oculta por defecto) -->
+      <svg id="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden text-gray-800 dark:text-gray-200">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </button>
   </div>
 
-  <!-- Overlay + panel móvil -->
-  <div id="mobile-overlay" class="md:hidden fixed inset-0 z-40 hidden bg-black/40"></div>
-
+  <!-- Overlay de fondo: ocupa SIEMPRE el viewport, pero deshabilitado por opacidad/pointer-events -->
   <div
+    id="mobile-overlay"
+    class="md:hidden fixed inset-0 z-40 opacity-0 pointer-events-none transition-opacity duration-200 bg-black/40"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Panel móvil: h-dvh para cubrir alto real; safe-area padding para no chocar barra del sistema -->
+  <aside
     id="mobile-menu"
-    class="md:hidden fixed top-0 right-0 z-50 h-full w-11/12 max-w-xs translate-x-full bg-white dark:bg-[#0b1220] border-l border-gray-200/70 dark:border-gray-700/70 shadow-xl transition-transform"
+    class="md:hidden fixed top-0 right-0 z-50 h-dvh w-11/12 max-w-xs translate-x-full bg-white dark:bg-[#0b1220] border-l border-gray-200/70 dark:border-gray-700/70 shadow-xl transition-transform duration-200"
     tabindex="-1"
+    aria-hidden="true"
   >
     <!-- Header del panel -->
-    <div class="h-14 px-4 flex items-center justify-between border-b border-gray-200/70 dark:border-gray-700/70">
+    <div class="h-14 px-4 flex items-center justify-between border-b border-gray-200/70 dark:border-gray-700/70 pt-[env(safe-area-inset-top)]">
       <span class="font-semibold">Menú</span>
       <button id="nav-close" class="inline-flex items-center justify-center rounded-lg p-2" aria-label="Cerrar menú">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-gray-700 dark:text-gray-200">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-gray-800 dark:text-gray-200">
           <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
     </div>
 
     <!-- Links -->
-    <ul class="p-4 space-y-2">
+    <ul class="p-4 space-y-2 pb-[calc(env(safe-area-inset-bottom)+16px)]">
       {links.map((l) => {
         const isActive = current === l.href || (l.href !== '/' && current.startsWith(l.href));
         return (
           <li>
             <a
               href={l.href}
-              class={`block rounded-lg px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-white/10 ${isActive ? 'text-brand font-medium' : 'text-gray-800 dark:text-gray-200'}`}
+              class={`block rounded-lg px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-white/10 ${
+                isActive ? 'text-brand font-medium' : 'text-gray-900 dark:text-gray-100'
+              }`}
               aria-current={isActive ? 'page' : undefined}
             >
               {l.label}
@@ -100,47 +116,66 @@ const current = Astro.url.pathname;
         </a>
       </li>
     </ul>
-  </div>
+  </aside>
 
-  <!-- Script mínimo para togglear -->
+  <!-- Lógica de apertura/cierre y focus -->
   <script>
+    // Elementos
     const $toggle = document.getElementById('nav-toggle');
-    const $close = document.getElementById('nav-close');
+    const $iconOpen = document.getElementById('icon-open');
+    const $iconClose = document.getElementById('icon-close');
     const $menu = document.getElementById('mobile-menu');
     const $overlay = document.getElementById('mobile-overlay');
+    const $close = document.getElementById('nav-close');
     const html = document.documentElement;
 
-    const open = () => {
-      $menu?.classList.remove('translate-x-full');
-      $overlay?.classList.remove('hidden');
-      html.classList.add('overflow-hidden');
-      $toggle?.setAttribute('aria-expanded', 'true');
-      // foco al primer link
-      const firstLink = $menu?.querySelector('a');
-      firstLink && firstLink.focus();
+    // Helpers de estado
+    const setState = (open) => {
+      // Panel deslizante
+      $menu?.classList.toggle('translate-x-full', !open);
+      $menu?.setAttribute('aria-hidden', String(!open));
+
+      // Overlay activo (sin hidden: usamos opacidad + pointer-events)
+      $overlay?.classList.toggle('opacity-0', !open);
+      $overlay?.classList.toggle('pointer-events-none', !open);
+
+      // Scroll lock del documento
+      html.classList.toggle('overflow-hidden', open);
+
+      // Botón hamburguesa/X
+      $toggle?.setAttribute('aria-expanded', String(open));
+      $toggle?.setAttribute('data-open', String(open));
+      $iconOpen?.classList.toggle('hidden', open);
+      $iconClose?.classList.toggle('hidden', !open);
+
+      // Enfoque accesible
+      if (open) {
+        const firstLink = $menu?.querySelector('a');
+        firstLink && firstLink.focus();
+      } else {
+        $toggle?.focus();
+      }
     };
 
-    const close = () => {
-      $menu?.classList.add('translate-x-full');
-      $overlay?.classList.add('hidden');
-      html.classList.remove('overflow-hidden');
-      $toggle?.setAttribute('aria-expanded', 'false');
-      $toggle?.focus();
-    };
+    const open = () => setState(true);
+    const close = () => setState(false);
 
-    $toggle?.addEventListener('click', open);
+    // Eventos
+    $toggle?.addEventListener('click', () => {
+      const isOpen = $toggle?.getAttribute('data-open') === 'true';
+      isOpen ? close() : open();
+    });
+
     $close?.addEventListener('click', close);
     $overlay?.addEventListener('click', close);
 
-    // Escape para cerrar
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') close();
-    });
+    // Escape cierra
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
 
-    // Cierra al navegar
+    // Cierra al navegar en el panel
     $menu?.addEventListener('click', (e) => {
-      const target = e.target;
-      if (target && target.tagName === 'A') close();
+      const t = e.target;
+      if (t && t.tagName === 'A') close();
     });
   </script>
 </nav>
