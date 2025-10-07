@@ -1,43 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PricingPlans from "../components/PricingPlans.astro";
+
+const title = "Servicios – Marin.dev";
+const description = "Paquetes claros, entregables definidos y tiempos de entrega reales.";
+const url = "https://daegon13.github.io/servicios";
+const image = "/og-default.png";
 ---
-<BaseLayout title="Servicios" description="Packs claros y soluciones a medida.">
-  <section class="py-12">
-    <h1 class="text-2xl font-bold mb-6">Servicios</h1>
-
-    <div class="grid md:grid-cols-3 gap-6">
-      {/* Plan Landing */}
-      <div class="rounded-xl border p-6">
-        <h2 class="font-semibold">Landing express</h2>
-        <p class="text-sm text-gray-600 mt-2">1–2 secciones. Ideal para campañas o lanzamientos rápidos.</p>
-        <ul class="mt-4 list-disc pl-5 text-sm text-gray-700">
-          <li>Astro + Tailwind</li>
-          <li>SEO base + OG</li>
-          <li>Formulario simple</li>
-        </ul>
-      </div>
-
-      {/* Plan Sitio */}
-      <div class="rounded-xl border p-6">
-        <h2 class="font-semibold">Sitio completo</h2>
-        <p class="text-sm text-gray-600 mt-2">4–6 páginas + contenido editable.</p>
-        <ul class="mt-4 list-disc pl-5 text-sm text-gray-700">
-          <li>MD/MDX o Admin ligero</li>
-          <li>SEO on-page</li>
-          <li>Animaciones sutiles</li>
-        </ul>
-      </div>
-
-      {/* Plan a medida */}
-      <div class="rounded-xl border p-6">
-        <h2 class="font-semibold">A medida</h2>
-        <p class="text-sm text-gray-600 mt-2">Integraciones, tiendas, dashboards, APIs.</p>
-        <ul class="mt-4 list-disc pl-5 text-sm text-gray-700">
-          <li>Firebase/Node/APIs</li>
-          <li>Auditoría de performance</li>
-          <li>Soporte de lanzamiento</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+<BaseLayout {title} {description} {url} {image}>
+  <PricingPlans />
 </BaseLayout>

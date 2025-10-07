@@ -1,0 +1,100 @@
+---
+/* PricingPlans.astro
+   - Componente de “servicios productizables” (3 paquetes)
+   - No requiere cambios en tailwind.config
+   - Botones apuntan a /contacto con params UTM para identificar el plan
+*/
+const plans = [
+  {
+    name: "Landing Express",
+    price: "USD 50–290",
+    lead: "Página one-page rápida, enfocada en conversión.",
+    deliverables: [
+      "Sección hero + servicios + CTA a WhatsApp",
+      "Copy base orientado a SEO on-page",
+      "Implementación analytics básica",
+      "Entrega en 3–5 días hábiles"
+    ],
+    idealFor: "Emprendedores que necesitan presencia inmediata",
+    ctaHref: "/contacto?plan=landing-express",
+  },
+  {
+    name: "Web Corporativa",
+    price: "USD 390–690",
+    lead: "Sitio institucional multi-página con foco en confianza.",
+    deliverables: [
+      "Hasta 5 páginas: Inicio, Servicios, Sobre mí, Contacto, Blog",
+      "Estructura SEO + OpenGraph + JSON-LD",
+      "Optimización de imágenes y performance",
+      "Entrega en 7–12 días hábiles"
+    ],
+    idealFor: "Negocios que requieren más profundidad y escalabilidad",
+    featured: true,
+    ctaHref: "/contacto?plan=web-corporativa",
+  },
+  {
+    name: "Panel + Integraciones",
+    price: "USD 690–1.190",
+    lead: "Admin básico y flujos de datos listos para crecer.",
+    deliverables: [
+      "Panel simple (Firebase/Firestore) para contenidos",
+      "Formularios con almacenamiento y alertas por email",
+      "Despliegue en GitHub Pages / Netlify / Vercel",
+      "Entrega en 10–20 días hábiles"
+    ],
+    idealFor: "Equipos que necesitan operativa y recolección de datos",
+    ctaHref: "/contacto?plan=panel-integraciones",
+  },
+];
+---
+<section class="py-12 md:py-16">
+  <!-- Título y descripción de la sección -->
+  <header class="text-center max-w-2xl mx-auto">
+    <h2 class="text-2xl md:text-3xl font-semibold">Servicios y paquetes</h2>
+    <p class="mt-2 text-gray-500">Elegí un punto de partida. Si necesitás algo a medida, lo adaptamos.</p>
+  </header>
+
+  <!-- Grid de planes -->
+  <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+    {plans.map((p) => (
+      <article
+        class={`rounded-2xl border p-6 shadow-soft transition hover:shadow-lg ${p.featured ? 'border-gray-900 dark:border-gray-100' : 'border-gray-200/70 dark:border-gray-700/70'}`}
+      >
+        <!-- Encabezado del plan -->
+        <div class="mb-4">
+          <h3 class="text-lg font-semibold">{p.name}</h3>
+          <p class="mt-1 text-sm text-gray-500">{p.lead}</p>
+        </div>
+
+        <!-- Precio (rango para transparencia) -->
+        <div class="mb-4">
+          <div class="text-xl font-semibold">{p.price}</div>
+          <p class="text-xs text-gray-500">Precio estimado. Cotización final según alcance.</p>
+        </div>
+
+        <!-- Lista de entregables -->
+        <ul class="space-y-2 text-sm">
+          {p.deliverables.map((d) => <li class="pl-5 relative">
+            <span class="absolute left-0 top-1.5 w-1.5 h-1.5 rounded-full bg-current"></span>{d}
+          </li>)}
+        </ul>
+
+        <!-- Para quién es ideal -->
+        <p class="mt-4 text-xs text-gray-500"><strong>Ideal para:</strong> {p.idealFor}</p>
+
+        <!-- CTA hacia Contacto con tracking simple -->
+        <div class="mt-6">
+          <a
+            href={p.ctaHref}
+            class={`inline-flex items-center justify-center w-full rounded-xl px-4 py-2 text-sm font-medium transition
+                    ${p.featured ? 'bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white'
+                                 : 'border border-gray-300/70 dark:border-gray-700/70 hover:opacity-90'}`}
+            aria-label={`Solicitar ${p.name}`}
+          >
+            Solicitar
+          </a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
