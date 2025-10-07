@@ -1,0 +1,21 @@
+---
+/* gracias.astro
+   - Página simple para confirmar envío cuando uses backend real
+   - Útil con Netlify/Vercel/Firebase; no cambia nada hoy
+*/
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Gracias – Marin.dev";
+const description = "Tu mensaje fue enviado correctamente.";
+const url = "https://daegon13.github.io/gracias";
+const image = "/og-default.png";
+---
+<BaseLayout {title} {description} {url} {image}>
+  <section class="py-16 text-center">
+    <h1 class="text-2xl md:text-3xl font-semibold">¡Gracias!</h1>
+    <p class="mt-2 text-gray-500">Recibí tu mensaje. Te respondo en menos de 24 horas.</p>
+    <div class="mt-6">
+      <a href="/proyectos" class="underline">Ver proyectos</a>
+    </div>
+  </section>
+</BaseLayout>

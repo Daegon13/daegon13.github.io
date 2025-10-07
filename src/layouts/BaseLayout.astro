@@ -50,6 +50,41 @@ const { title, description, image = '/og-default.png', url = '' } = Astro.props;
         ]
       }
     </script>
+        <!-- JSON-LD: Service + Offer (resumen de tus paquetes) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Desarrollo web frontend",
+        "provider": {
+          "@type": "Person",
+          "name": "Diego Marin",
+          "url": "https://daegon13.github.io/"
+        },
+        "areaServed": "Uruguay y remoto",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Paquetes",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "name": "Landing Express",
+              "priceSpecification": { "@type": "PriceSpecification", "priceCurrency": "USD", "minPrice": 190, "maxPrice": 290 }
+            },
+            {
+              "@type": "Offer",
+              "name": "Web Corporativa",
+              "priceSpecification": { "@type": "PriceSpecification", "priceCurrency": "USD", "minPrice": 390, "maxPrice": 690 }
+            },
+            {
+              "@type": "Offer",
+              "name": "Panel + Integraciones",
+              "priceSpecification": { "@type": "PriceSpecification", "priceCurrency": "USD", "minPrice": 690, "maxPrice": 1190 }
+            }
+          ]
+        }
+      }
+    </script>
 
 
     <!-- Canonical (solo si llega url por props) -->
