@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Política de Privacidad – Marin.dev";
+const description =
+  "Información sobre qué datos se recopilan, para qué se usan y cómo ejercer tus derechos.";
+const url = "https://daegon13.github.io/politica-de-privacidad";
+const image = "/og-default.png";
+
+const lastUpdated = "9 de enero de 2026";
+---
+<BaseLayout {title} {description} {url} {image}>
+  <section class="py-12 md:py-16">
+    <div class="max-w-3xl">
+      <h1 class="text-2xl md:text-3xl font-semibold">Política de Privacidad</h1>
+      <p class="mt-2 text-gray-500">
+        Última actualización: <strong>{lastUpdated}</strong>
+      </p>
+
+      <div class="mt-8 space-y-6 text-gray-700 leading-relaxed">
+        <p>
+          Esta Política de Privacidad explica cómo se tratan los datos personales en
+          <strong>Marin.dev</strong> (en adelante, el “Sitio”), disponible en
+          <a class="underline" href="https://daegon13.github.io/">daegon13.github.io</a>.
+          Si tenés dudas, podés escribir a
+          <a class="underline" href="mailto:damgmarin13@gmail.com">damgmarin13@gmail.com</a>.
+        </p>
+
+        <h2 class="text-lg font-semibold text-gray-900">1) Responsable del tratamiento</h2>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><strong>Responsable:</strong> Diego Marin</li>
+          <li><strong>Contacto:</strong> <a class="underline" href="mailto:damgmarin13@gmail.com">damgmarin13@gmail.com</a></li>
+          <li><strong>País:</strong> Uruguay</li>
+        </ul>
+
+        <h2 class="text-lg font-semibold text-gray-900">2) Qué datos se recopilan</h2>
+        <p>El Sitio está pensado como portafolio informativo. La recolección de datos es mínima:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>
+            <strong>Formulario de contacto:</strong> nombre, email, presupuesto estimado, plazo (si aplica) y mensaje.
+          </li>
+          <li>
+            <strong>Emails que envíes voluntariamente:</strong> si nos contactás por correo, se tratarán los datos que incluyas en el mensaje.
+          </li>
+          <li>
+            <strong>Datos técnicos básicos:</strong> como en cualquier web, el proveedor de hosting puede registrar información técnica
+            (por ejemplo, dirección IP, user-agent, fecha/hora de acceso) para seguridad y funcionamiento.
+          </li>
+        </ul>
+
+        <h2 class="text-lg font-semibold text-gray-900">3) Cómo funciona el formulario (importante)</h2>
+        <p>
+          El formulario de <a class="underline" href="/contacto">Contacto</a> no usa una base de datos ni un backend propio:
+          al enviarlo, el Sitio arma un <strong>mailto</strong> en tu dispositivo para que se abra tu cliente de correo
+          (Gmail, Outlook, etc.) con el asunto y el cuerpo precompletados.
+        </p>
+        <p>
+          Esto significa que <strong>los datos del formulario no quedan almacenados automáticamente en el Sitio</strong>.
+          Solo se procesan/guardan si decidís enviar el email desde tu cliente de correo.
+        </p>
+
+        <h2 class="text-lg font-semibold text-gray-900">4) Finalidades del tratamiento</h2>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Responder consultas y solicitudes de presupuesto.</li>
+          <li>Coordinar reuniones o llamadas si lo solicitás.</li>
+          <li>Mejorar la seguridad y el funcionamiento general del Sitio.</li>
+        </ul>
+
+        <h2 class="text-lg font-semibold text-gray-900">5) Base legal</h2>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><strong>Consentimiento:</strong> cuando completás el formulario o enviás un email de forma voluntaria.</li>
+          <li><strong>Interés legítimo:</strong> mantener el Sitio seguro y funcionando correctamente.</li>
+        </ul>
+
+        <h2 class="text-lg font-semibold text-gray-900">6) Cookies y analítica</h2>
+        <p>
+          Actualmente el Sitio <strong>no configura cookies de tracking</strong> propias.
+          Podés navegar sin aceptar cookies de marketing.
+        </p>
+        <p>
+          Si en el futuro se incorporan herramientas de analítica (por ejemplo, para medir visitas),
+          esta política se actualizará para informarlo claramente.
+        </p>
+
+        <h2 class="text-lg font-semibold text-gray-900">7) Terceros y servicios externos</h2>
+        <p>
+          El Sitio se publica en <strong>GitHub Pages</strong>. GitHub puede procesar datos técnicos necesarios para servir
+          el contenido y proteger la infraestructura. Además, el Sitio incluye enlaces a plataformas externas
+          (por ejemplo GitHub o LinkedIn); al entrar en ellas, aplican sus propias políticas.
+        </p>
+
+        <h2 class="text-lg font-semibold text-gray-900">8) Conservación</h2>
+        <p>
+          Si nos contactás por email, conservaremos la conversación el tiempo necesario para atender tu consulta y, si
+          corresponde, para gestionar la relación comercial y soporte posterior. Podés solicitar eliminación cuando quieras
+          (ver “Derechos”).
+        </p>
+
+        <h2 class="text-lg font-semibold text-gray-900">9) Derechos de las personas</h2>
+        <p>
+          Podés solicitar acceso, rectificación, actualización, inclusión o supresión de tus datos, entre otros derechos,
+          conforme a la normativa aplicable en Uruguay (Ley N.º 18.331 y normas complementarias).
+          Para ejercerlos, escribinos a
+          <a class="underline" href="mailto:damgmarin13@gmail.com">damgmarin13@gmail.com</a>
+          indicando tu solicitud y el email con el que nos contactaste.
+        </p>
+
+        <h2 class="text-lg font-semibold text-gray-900">10) Seguridad</h2>
+        <p>
+          Se aplican medidas razonables de seguridad acordes al tipo de Sitio. Aun así, ningún sistema es 100% infalible:
+          si detectás algo raro, avisame cuanto antes.
+        </p>
+
+        <h2 class="text-lg font-semibold text-gray-900">11) Cambios a esta política</h2>
+        <p>
+          Esta política puede actualizarse para reflejar cambios en el Sitio o por motivos legales/técnicos.
+          La fecha de “Última actualización” al inicio te permite ver la versión vigente.
+        </p>
+
+        <div class="mt-8 rounded-xl border border-gray-200/70 bg-gray-50 p-4">
+          <p class="text-sm text-gray-600">
+            <strong>Resumen rápido:</strong> este portafolio no vende datos ni hace tracking publicitario. El “formulario”
+            arma un email en tu dispositivo; si no lo enviás, el Sitio no recibe nada.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
