@@ -6,6 +6,7 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 // 2) MDX porque estás usando .mdx en /src/content/proyectos
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   // URL pública del sitio (correcta para user/org pages)
@@ -17,5 +18,6 @@ export default defineConfig({
       applyBaseStyles: true,
     }),
     mdx(),
+    sitemap(),
   ],
 });

@@ -1,4 +1,5 @@
 ---
+import { SITE_URL, LINKEDIN_URL, GITHUB_URL } from "../lib/contact";
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
@@ -7,6 +8,12 @@ import '../styles/tailwind.css';
 
 /* Props SEO base: si no pasás url, evitamos canonical vacío */
 const { title, description, image = '/og-default.png', url = '' } = Astro.props;
+
+// Canonical/OG absolutos (SEO prolijo en GitHub Pages)
+const site = Astro.site?.toString() ?? SITE_URL;
+const pathname = (typeof url === "string" && url) ? (url.startsWith("http") ? new URL(url).pathname : url) : Astro.url.pathname;
+const canonical = new URL(pathname, site).href;
+const ogImage = image.startsWith("http") ? image : new URL(image, site).href;
 ---
 <html lang="es" class="scroll-smooth">
   <head>
@@ -20,10 +27,10 @@ const { title, description, image = '/og-default.png', url = '' } = Astro.props;
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
-    <meta property="og:url" content={url} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonical} />
 
-        <!-- JSON-LD: Organization + WebSite -->
+            <!-- JSON-LD: Organization + WebSite -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -34,22 +41,19 @@ const { title, description, image = '/og-default.png', url = '' } = Astro.props;
             "url": "https://daegon13.github.io/",
             "logo": "https://daegon13.github.io/og-default.png",
             "sameAs": [
-              "https://github.com/Daegon13"
+              "https://github.com/Daegon13",
+              "https://www.linkedin.com/in/diego-marin-34632121b/"
             ]
           },
           {
             "@type": "WebSite",
             "url": "https://daegon13.github.io/",
-            "name": "Portafolio de Desarrollo Web",
-            "potentialAction": {
-              "@type": "SearchAction",
-              "target": "https://daegon13.github.io/buscar?q={search_term_string}",
-              "query-input": "required name=search_term_string"
-            }
+            "name": "Marin.dev"
           }
         ]
       }
     </script>
+
         <!-- JSON-LD: Service + Offer (resumen de tus paquetes) -->
     <script type="application/ld+json">
       {
@@ -69,7 +73,7 @@ const { title, description, image = '/og-default.png', url = '' } = Astro.props;
             {
               "@type": "Offer",
               "name": "Landing Express",
-              "priceSpecification": { "@type": "PriceSpecification", "priceCurrency": "USD", "minPrice": 190, "maxPrice": 290 }
+              "priceSpecification": { "@type": "PriceSpecification", "priceCurrency": "USD", "minPrice": 50, "maxPrice": 290 }
             },
             {
               "@type": "Offer",
@@ -129,8 +133,8 @@ const { title, description, image = '/og-default.png', url = '' } = Astro.props;
     </script>
 
 
-    <!-- Canonical (solo si llega url por props) -->
-    {url && <link rel="canonical" href={url} />}
+    <!-- Canonical -->
+    <link rel="canonical" href={canonical} />
 
     <link rel="icon" href="/favicon.svg" />
   </head>

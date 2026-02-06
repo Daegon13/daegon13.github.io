@@ -5,6 +5,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import PricingPlans from "../components/PricingPlans.astro";
 import { getCollection } from 'astro:content';
 import FAQs from "../components/FAQs.astro";
+import { waLink, DEFAULT_WHATSAPP_MESSAGE } from "../lib/contact";
 
 // Cargar la colección de proyectos y ordenarlos por fecha descendente
 let proyectos = await getCollection('proyectos');
@@ -14,46 +15,61 @@ const destacados = proyectos.slice(0, 3);
 <BaseLayout title="Desarrollador Web Freelance" description="Soluciones rápidas, claras y a medida para tu negocio.">
 <section class="py-20 md:py-28 text-center">
   <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
-    Desarrollo de sitios web rápidos, escalables y adaptados a tu negocio
+    Webs que convierten visitas en consultas (y te dejan listo para escalar)
   </h1>
-  <p class="mt-4 text-base md:text-lg text-gray-400">
-    Frontend moderno, integraciones simples y SEO técnico eficiente.
+  <p class="mt-4 text-base md:text-lg text-gray-600">
+    Landing, web corporativa o e-commerce con performance, SEO base y CTAs a WhatsApp. Entregables por escrito, cronograma claro y soporte post-lanzamiento.
   </p>
 
   <!-- CTAs -->
   <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-    <a href="/contacto" class="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white transition">
-      Pedir estimación en 24h
+    <a
+      href={waLink(DEFAULT_WHATSAPP_MESSAGE)}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white transition"
+    >
+      Cotizar por WhatsApp
     </a>
-    <a href="/proyectos" class="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium border border-gray-300/70 dark:border-gray-700/70 hover:opacity-90 transition">
-      Ver proyectos
+    <a
+      href="#planes"
+      class="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium border border-gray-300/70 dark:border-gray-700/70 hover:opacity-90 transition"
+    >
+      Ver paquetes y entregables
+    </a>
+    <a
+      href="/proyectos"
+      class="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium border border-gray-300/70 dark:border-gray-700/70 hover:opacity-90 transition"
+    >
+      Ver casos reales
     </a>
   </div>
 
   <!-- Prueba social simple: no requiere íconos -->
   <p class="mt-6 text-sm text-gray-500">
-    +3 sitios lanzados • cargas sub-1s • respuesta en 24h
+    Propuesta en 24h • pagos por hitos • entrega con repo + deploy
   </p>
 </section>
 
-  <!-- SKILLS: destrezas principales -->
+  <!-- QUÉ RESUELVO: enfocado a negocio (CRO) -->
   <section class="py-8">
+    <h2 class="text-xl font-semibold mb-6">Qué resuelvo (sin humo)</h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="rounded-xl border p-4">
-        <h3 class="font-semibold">Frontend</h3>
-        <p class="text-sm text-gray-600">HTML, CSS, JS, Tailwind, React</p>
+        <h3 class="font-semibold">Más consultas</h3>
+        <p class="text-sm text-gray-600">CTAs claros, WhatsApp guiado y secciones que responden objeciones.</p>
       </div>
       <div class="rounded-xl border p-4">
-        <h3 class="font-semibold">Contenido</h3>
-        <p class="text-sm text-gray-600">Astro, MD/MDX, SEO on‑page</p>
+        <h3 class="font-semibold">Más confianza</h3>
+        <p class="text-sm text-gray-600">Estructura institucional + prueba social + mensajes de seguridad.</p>
       </div>
       <div class="rounded-xl border p-4">
-        <h3 class="font-semibold">Integraciones</h3>
-        <p class="text-sm text-gray-600">Firebase, APIs, formularios</p>
+        <h3 class="font-semibold">Más velocidad</h3>
+        <p class="text-sm text-gray-600">Carga rápida y base SEO para que no dependas solo de ads.</p>
       </div>
       <div class="rounded-xl border p-4">
-        <h3 class="font-semibold">Deploy</h3>
-        <p class="text-sm text-gray-600">GitHub Pages, Netlify, Vercel</p>
+        <h3 class="font-semibold">Menos fricción</h3>
+        <p class="text-sm text-gray-600">Formulario, integraciones y handoff prolijo (repo + deploy).</p>
       </div>
     </div>
   </section>
@@ -71,6 +87,7 @@ const destacados = proyectos.slice(0, 3);
               stack={p.data.stack}
               slug={p.slug}
               cover={p.data.cover}
+              resultado={p.data.resultado}
             />
           );
         })
@@ -90,7 +107,7 @@ const destacados = proyectos.slice(0, 3);
     <div class="rounded-2xl border p-8">
       <h3 class="text-lg font-semibold">¿Listo para empezar?</h3>
       <p class="text-sm text-gray-600 mt-1">Tengo cupos limitados por mes. Contame tu idea y vemos el mejor camino.</p>
-      <a href="/contacto" class="inline-block mt-4 rounded-lg bg-brand px-5 py-2.5 text-white">Hablemos</a>
+      <a href={waLink("Hola Diego, quiero una propuesta.\n\nRubro: [Rubro]\nObjetivo: [más consultas / reservas / ventas]\nTengo: [web/no web]\nPresupuesto estimado: [USD]\nDetalles: [breve]\n")} target="_blank" rel="noopener noreferrer" class="inline-block mt-4 rounded-lg bg-brand px-5 py-2.5 text-white">Enviar mensaje guiado</a>
     </div>
   </section>
 </BaseLayout>

@@ -5,7 +5,7 @@
 */
 import Badge from './Badge.astro';
 const STACK_LIMIT = 4;
-const { title, resumen, stack = [], slug, cover = '/og-default.png' } = Astro.props;
+const { title, resumen, stack = [], slug, cover = '/og-default.png', resultado = '' } = Astro.props;
 ---
 <a
   href={`/proyectos/${slug}`}
@@ -22,7 +22,15 @@ const { title, resumen, stack = [], slug, cover = '/og-default.png' } = Astro.pr
 
   <!-- Contenido textual: se mantiene igual -->
   <div class="p-4">
-    <h3 class="text-base font-semibold group-hover:text-brand">{title}</h3>
+        <div class="flex items-start justify-between gap-3">
+      <h3 class="text-base font-semibold group-hover:text-brand">{title}</h3>
+      {resultado && (
+        <span class="shrink-0 rounded-full border border-gray-200/70 px-2 py-0.5 text-[11px] text-gray-600">
+          {resultado}
+        </span>
+      )}
+    </div>
+
     <p class="mt-1 text-sm text-gray-600">{resumen}</p>
 
     <!-- Badges de stack (limitados para no romper el layout) -->

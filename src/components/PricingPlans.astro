@@ -1,4 +1,5 @@
 ---
+import { waLink } from "../lib/contact";
 /* PricingPlans.astro
    - Componente de “servicios productizables” (3 paquetes)
    - No requiere cambios en tailwind.config
@@ -16,7 +17,7 @@ const plans = [
       "Entrega en 3–5 días hábiles"
     ],
     idealFor: "Emprendedores que necesitan presencia inmediata",
-    ctaHref: "/contacto?plan=landing-express",
+    planId: "landing-express",
   },
   {
     name: "Web Corporativa",
@@ -30,7 +31,7 @@ const plans = [
     ],
     idealFor: "Negocios que requieren más profundidad y escalabilidad",
     featured: true,
-    ctaHref: "/contacto?plan=web-corporativa",
+    planId: "web-corporativa",
   },
   {
     name: "Panel + Integraciones",
@@ -43,7 +44,7 @@ const plans = [
       "Entrega en 10–20 días hábiles"
     ],
     idealFor: "Equipos que necesitan operativa y recolección de datos",
-    ctaHref: "/contacto?plan=panel-integraciones",
+    planId: "panel-integraciones",
   },
 ];
 ---
@@ -85,13 +86,15 @@ const plans = [
         <!-- CTA hacia Contacto con tracking simple -->
         <div class="mt-6">
           <a
-            href={p.ctaHref}
+            href={waLink(`Hola Diego, quiero el plan "${p.name}".\n\nMi rubro: [Rubro]\nObjetivo: [más consultas / reservas / ventas]\nTengo: [web/no web]\nPresupuesto estimado: [USD]\nDetalles: [breve]\n`)}
+            target="_blank"
+            rel="noopener noreferrer"
             class={`inline-flex items-center justify-center w-full rounded-xl px-4 py-2 text-sm font-medium transition
                     ${p.featured ? 'bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white'
                                  : 'border border-gray-300/70 dark:border-gray-700/70 hover:opacity-90'}`}
-            aria-label={`Solicitar ${p.name}`}
+            aria-label={`Quiero este plan ${p.name}`}
           >
-            Solicitar
+            Quiero este plan
           </a>
         </div>
       </article>

@@ -1,4 +1,5 @@
 ---
+import { waLink, DEFAULT_WHATSAPP_MESSAGE } from "../lib/contact";
 /* NAVBAR RESPONSIVE—FIXES MOVIL
    Cambios clave:
    1) Overlay full viewport con opacidad transicionada (nada de hidden que rompe stacking).
@@ -45,7 +46,7 @@ const current = Astro.url.pathname;
 
     <!-- CTA discreto en desktop -->
     <div class="hidden md:block">
-      <a href="/contacto" class="text-sm font-medium hover:text-brand">Presupuesto</a>
+      <a href={waLink(DEFAULT_WHATSAPP_MESSAGE)} class="text-sm font-medium hover:text-brand" target="_blank" rel="noopener noreferrer">Cotizar por WhatsApp</a>
     </div>
 
     <!-- Botón hamburguesa (solo móvil) -->
